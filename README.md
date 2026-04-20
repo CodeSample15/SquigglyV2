@@ -53,7 +53,7 @@ branch_ifelse       = 'if else' , expression , '{' , [body] , '}'
 branch_else         = 'else' , '{' , [body] , '}'
 
 # expression
-expression          =
+expression          = 
 ```
 
 NB: Grammar assumes whitespace has been stripped from the output of the lexer 
