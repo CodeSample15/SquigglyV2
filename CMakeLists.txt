@@ -6,4 +6,4 @@ add_compile_options(-Wall -Werror) #use this for development, GET RID OF ALL WAR
 file( GLOB SOURCES "src/*.cpp" )
 
 include_directories( include )
-add_executable( squiggly ${SOURCES} )
+add_executable( scribble ${SOURCES} )
