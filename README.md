@@ -1,5 +1,6 @@
-# SquigglyV2
-Doing this properly
+# Scribble
+
+Squiggly but actually useful
 
 ## Language Grammar
 ```EBNF

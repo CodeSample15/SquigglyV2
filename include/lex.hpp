@@ -16,9 +16,9 @@ enum TOK_TYPE {
     FUNCTION_DEFINE,                // fun
 
     //built in types
-    NUMBER,                         // num
-    FLOAT,                          // float
-    STRING,                         // string
+    NUMBER_TYPE,                    // num
+    FLOAT_TYPE,                     // float
+    STRING_TYPE,                    // string
 
     //values
     IDENTIFIER,                     // any string of characters
@@ -65,7 +65,10 @@ enum TOK_TYPE {
     
     //ignored (stripped from lexer output)
     WHITESPACE,
-    COMMENT
+    COMMENT,
+
+    //failsafe
+    OTHER
 };
 
 struct Token {
