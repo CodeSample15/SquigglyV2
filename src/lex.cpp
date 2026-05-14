@@ -37,6 +37,7 @@ vector<Token> lex(string &source)
 
         }
 
+        //construct and push token
         Token next;
         next.line = loc.row;
         next.start_col = start_col;

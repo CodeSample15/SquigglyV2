@@ -1,0 +1,55 @@
+#include "file_reader.hpp"
+
+using namespace file_reader;
+using namespace std;
+
+file_reader::file_reader::file_reader(string* source) {
+    this->source = source;
+    it = source->begin();
+    loc = {0,0};
+}
+
+/* return true if the source string is exhausted */
+bool file_reader::file_reader::empty() {
+    return it >= source->end();
+}
+
+/* Get the next item in the source string without consuming */
+char file_reader::file_reader::peek() {
+    if(it >= source->end()) throw (read_err) {0};
+
+    return *it;
+}
+
+/* Get the next item in the source string and consume it */
+char file_reader::file_reader::next() {
+    if(it >= source->end()) throw (read_err) {0};
+    char next = *(it++);
+    loc.col++;
+
+    //check if we need to set the position
+    if(next == '\n') {
+        loc.col = 0;
+        loc.row++;
+    }
+
+    return next;
+}
+
+/* Check if the source string has a pattern in the current read position */
+bool file_reader::file_reader::has_next(std::string pattern, bool consume) {
+    if(it+pattern.size() >= source->end()) throw (read_err) {0};
+
+    for(size_t i=0; i<pattern.size(); i++) {
+        if(*(it+i) != pattern[i]) return false;
+    }
+
+    if(consume) it+=pattern.size();
+
+    return true;
+}
+
+/* Return the current row and column position of the reader */
+src_loc file_reader::file_reader::get_loc() {
+    return loc;
+}
