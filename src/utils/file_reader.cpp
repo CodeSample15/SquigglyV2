@@ -37,7 +37,7 @@ char file_reader::file_reader::next() {
 
 /* Check if the source string has a pattern in the current read position */
 bool file_reader::file_reader::has_next(string pattern, bool consume) {
-    if(it+pattern.size() >= source->end()) throw (read_err) {0};
+    if(it+pattern.size() >= source->end()) return false;
 
     for(size_t i=0; i<pattern.size(); i++) {
         if(*(it+i) != pattern[i]) return false;
