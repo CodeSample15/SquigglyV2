@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
     try {
-        string input = "hello";
+        string input = "h3ll0";
         vector<Token> tokens = lex(input);
         print_tokens(tokens);
     } 
