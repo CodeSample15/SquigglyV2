@@ -1,16 +1,11 @@
 #include "lex.hpp"
+#include "file_reader.hpp"
 #include "err.hpp"
 
 using namespace std;
 
-//simple struct to pass around to different functions to keep track of where we are in the source code
-struct src_loc {
-    size_t row;
-    size_t col;
-};
-
 //helper prototypes
-TOK_TYPE handle_alpha(string::iterator &it, src_loc &loc, string &lexeme);
+TOK_TYPE handle_alpha(file_reader::file_reader &fr, string &lexeme);
 TOK_TYPE check_is_keyword(string &lexeme);
 
 vector<Token> lex(string &source) 
@@ -18,30 +13,34 @@ vector<Token> lex(string &source)
     //where we're going to store everything
     vector<Token> tokens;
 
-    string::iterator it = source.begin();
-    src_loc loc = {0,0}; //keep track of where we are in this file
+    file_reader::file_reader fr(&source);
     string lexeme = "";
 
-    while(it < source.end()) 
+    while(!fr.empty()) 
     {
         //reset lexeme
         lexeme = "";
 
         //get what type of token we should have
         TOK_TYPE type = TOK_TYPE::OTHER;
-        size_t start_col = loc.col;
+        size_t start_col = fr.loc.col;
 
-        if(isalpha(*it))
-            type = handle_alpha(it, loc, lexeme);
-        else if(isdigit(*it)) {
+        try {
+            char next = fr.peek();
+            if(isalpha(next))
+                type = handle_alpha(fr, lexeme);
+            else if(isdigit(next)) {
 
+            }
+        } catch(file_reader::read_err err) {
+            continue;
         }
 
         //construct and push token
         Token next;
-        next.line = loc.row;
+        next.line = fr.loc.row;
         next.start_col = start_col;
-        next.end_col = loc.col;
+        next.end_col = fr.loc.col;
         next.lexeme = lexeme;
         next.type = type;
 
@@ -51,14 +50,14 @@ vector<Token> lex(string &source)
     return tokens;
 }
 
-TOK_TYPE handle_alpha(string::iterator &it, src_loc &loc, string &lexeme) {
-    lexeme += *(it++);
-    loc.col++;
+TOK_TYPE handle_alpha(file_reader::file_reader &fr, string &lexeme) {
+    lexeme += fr.next();
 
-    while(isalpha(*it) || isdigit(*it)) {
-        lexeme += *(it++);
-        loc.col++;
-    }
+    try {
+        while(isalpha(fr.peek()) || isdigit(fr.peek())) {
+            lexeme += fr.next();
+        }
+    } catch (file_reader::read_err) {} //safe to ignore
 
     return check_is_keyword(lexeme);
 }

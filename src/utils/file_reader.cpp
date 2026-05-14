@@ -1,6 +1,5 @@
 #include "file_reader.hpp"
 
-using namespace file_reader;
 using namespace std;
 
 file_reader::file_reader::file_reader(string* source) {
@@ -37,7 +36,7 @@ char file_reader::file_reader::next() {
 }
 
 /* Check if the source string has a pattern in the current read position */
-bool file_reader::file_reader::has_next(std::string pattern, bool consume) {
+bool file_reader::file_reader::has_next(string pattern, bool consume) {
     if(it+pattern.size() >= source->end()) throw (read_err) {0};
 
     for(size_t i=0; i<pattern.size(); i++) {
@@ -47,9 +46,4 @@ bool file_reader::file_reader::has_next(std::string pattern, bool consume) {
     if(consume) it+=pattern.size();
 
     return true;
-}
-
-/* Return the current row and column position of the reader */
-src_loc file_reader::file_reader::get_loc() {
-    return loc;
 }

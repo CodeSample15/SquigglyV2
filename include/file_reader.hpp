@@ -20,6 +20,9 @@ struct src_loc {
     size_t col;
 };
 
+/*
+    Read content from an input string without causing OOB errors
+*/
 class file_reader {
 public:
     file_reader(std::string* source);
@@ -36,13 +39,11 @@ public:
     /* Check if the source string has a pattern in the current read position */
     bool has_next(std::string pattern, bool consume=false);
     
-    /* Return the current row and column position of the reader */
-    src_loc get_loc();
+    src_loc loc;
 
 private:
     std::string* source;
-    string::iterator it;
-    src_loc loc;
+    std::string::iterator it;
 };
 
 }

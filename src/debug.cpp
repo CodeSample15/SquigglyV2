@@ -8,7 +8,7 @@ string tok_type_to_string(TOK_TYPE tok);
 void print_tokens(vector<Token> &tokens) 
 {
     for(Token& tok : tokens) {
-        cout << "| " << tok_type_to_string(tok.type) << " | -- " << "line: " << tok.line << " -- cols: (" << tok.start_col << ", " << tok.end_col << " -- [" << tok.lexeme << "]" << endl;
+        cout << "| " << tok_type_to_string(tok.type) << " | -- " << "line: " << tok.line << " -- cols: (" << tok.start_col << ", " << tok.end_col << ") -- [" << tok.lexeme << "]" << endl;
     }
 }
 
