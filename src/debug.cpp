@@ -3,8 +3,6 @@
 
 using namespace std;
 
-string tok_type_to_string(TOK_TYPE tok);
-
 void print_tokens(vector<Token> &tokens) 
 {
     for(Token& tok : tokens) {

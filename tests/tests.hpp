@@ -12,4 +12,9 @@ struct test_fail {
 struct test_t {
     std::string name;
     std::function<void()> test_fun;
+
+    test_t(std::string name, std::function<void()> test_fun) {
+        this->name = name;
+        this->test_fun = test_fun;
+    }
 };

@@ -3,10 +3,18 @@ cmake_minimum_required(VERSION 3.28)
 PROJECT (scribble_tests LANGUAGES CXX)
 
 add_compile_options(-Wall -Werror)
-file( GLOB_RECURSE TESTS "./*.cpp" )
-file( GLOB_RECURSE SCRIBBLE "../src/*.cpp")
 
-add_executable( scribble_tests ${TESTS} )
+# compile tests
+file( GLOB TESTS_SRC "*.cpp" "lexer/*.cpp" )
+add_executable( scribble_tests ${TESTS_SRC} )
 
+#set up include directories for the main program
 include_directories( ../include )
-add_library( scribble_tests )
+
+#compile the main program
+file( GLOB SCRIBBLE_SRC "../src/*.cpp" "../src/utils/*.cpp")
+list(REMOVE_ITEM SCRIBBLE_SRC "../src/main.cpp")
+add_library( scribble ${SCRIBBLE_SRC} )
+
+#link the compiled main program into the test code
+target_link_libraries(scribble_tests scribble)
