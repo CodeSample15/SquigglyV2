@@ -22,17 +22,26 @@ int main(int argc, char** argv) {
         load_lexer_tests(tests);
     }
 
+    int failed_tests = 0;
+
     //run tests
     for(test_t &test : tests) {
         try {
             test.test_fun();
 
-            cout << "[✅] Test passed! -- \"" << test.name << "\"" << endl;
+            cout << "[ ✅ ] Test passed! -- \"" << test.name << "\"" << endl;
         } catch (test_fail &err) {
-            cout << "[❌] Test failed: -- \"" << test.name << "\"" << endl;
+            failed_tests++;
+
+            cout << "[ ❌ ] Test failed: -- \"" << test.name << "\"" << endl;
             cout << "       ↳ [" << KCYN << err.test_name << RST << "] " << "\"" << err.reason << "\"" << endl;
         }
     }
+
+    cout << endl;
+    cout << "[-] " << FMAG("Tests completed:") << endl;
+    cout << FGRN("\tPassed: ") << (tests.size() - failed_tests) << endl;
+    cout << FRED("\tFailed: ") << failed_tests << endl;
 
     return 0;
 }
