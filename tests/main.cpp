@@ -1,14 +1,17 @@
+#include <windows.h>
 #include <iostream>
 #include <cstring>
 
 #include "tests.hpp"
+#include "Colors.hpp"
 #include "lexer/lexer_tests.hpp"
 
 using namespace std;
 
 int main(int argc, char** argv) {
-    vector<test_t> tests;
+    SetConsoleOutputCP(CP_UTF8);
 
+    vector<test_t> tests;
     if(argc != 1) {
         for(int i=0; i<argc; i++) {
             if(strcmp(argv[i], "lex")==0)
@@ -24,10 +27,10 @@ int main(int argc, char** argv) {
         try {
             test.test_fun();
 
-            cout << "[] Test passed!" << endl;
+            cout << "[✅] Test passed! -- \"" << test.name << "\"" << endl;
         } catch (test_fail &err) {
-            cout << "[] Test failed:" << endl;
-            cout << "       + \"" << err.test_name << "\" --> " << err.reason << endl;
+            cout << "[❌] Test failed: -- \"" << test.name << "\"" << endl;
+            cout << "       ↳ [" << KCYN << err.test_name << RST << "] " << "\"" << err.reason << "\"" << endl;
         }
     }
 
