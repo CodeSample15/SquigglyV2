@@ -37,6 +37,10 @@ void load_lexer_tests(vector<test_t> &tests) {
     tests.emplace_back("Digit 3", [&]{ test_type_lex("23.", TOK_TYPE::FLOAT_LITERAL, "23."); });
     tests.emplace_back("Digit 4", [&]{ test_type_lex("23.3", TOK_TYPE::FLOAT_LITERAL, "23.3"); });
 
+    tests.emplace_back("String literal", [&]{ test_type_lex("\"Hello World!\"", TOK_TYPE::STRING_LITERAL, "\"Hello World!\""); });
+    tests.emplace_back("String literal - unclosed", [&]{ test_type_lex("\"Hello World!", TOK_TYPE::STRING_LITERAL, "", true); });
+    tests.emplace_back("String literal - newline unclosed", [&]{ test_type_lex("\"Hello Wor\nld!\"", TOK_TYPE::STRING_LITERAL, "", true); });
+
     //testing keywords
     tests.emplace_back("keyword: use", [&]{ test_type_lex("use", TOK_TYPE::USE, "use"); });
     tests.emplace_back("keyword: as", [&]{ test_type_lex("as", TOK_TYPE::AS, "as"); });

@@ -2,13 +2,12 @@
 #include "file_reader.hpp"
 #include "err.hpp"
 
-#include <iostream>
-
 using namespace std;
 
 //helper prototypes
 TOK_TYPE handle_alpha(file_reader::file_reader &fr, string &lexeme);
 TOK_TYPE handle_digit(file_reader::file_reader &fr, string &lexeme);
+TOK_TYPE handle_string(file_reader::file_reader &fr, string &lexeme);
 TOK_TYPE check_is_keyword(string &lexeme, file_reader::file_reader &fr);
 
 vector<Token> lex(string &source) 
@@ -33,8 +32,14 @@ vector<Token> lex(string &source)
             type = handle_alpha(fr, lexeme);
         else if(isdigit(c))
             type = handle_digit(fr, lexeme);
-        else
-            fr.next();
+        else {
+            switch (c) {
+                case '"':
+                    type = handle_string(fr, lexeme); break;
+                default:
+                    fr.next(); break;
+            }
+        }
 
         //construct and push token
         Token next;
@@ -78,6 +83,20 @@ TOK_TYPE handle_digit(file_reader::file_reader &fr, string &lexeme) {
     }
 
     return found_dot ? TOK_TYPE::FLOAT_LITERAL : TOK_TYPE::INT_LITERAL;
+}
+
+TOK_TYPE handle_string(file_reader::file_reader &fr, string &lexeme) {
+    lexeme += fr.next();
+    
+    while(!fr.empty() && fr.peek() != '"' && fr.peek() != '\n') {
+        lexeme += fr.next();
+    }
+
+    if(fr.empty() || fr.peek() == '\n') throw (ScribbleErr) { fr.loc.row, fr.loc.col, ERR_TYPE::UNCLOSED_QUOTE };
+
+    lexeme += fr.next(); //get the last quote added to the lexeme
+
+    return TOK_TYPE::STRING_LITERAL;
 }
 
 /*
