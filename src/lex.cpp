@@ -2,6 +2,8 @@
 #include "file_reader.hpp"
 #include "err.hpp"
 
+#include <iostream>
+
 using namespace std;
 
 //helper prototypes
@@ -88,7 +90,10 @@ TOK_TYPE check_is_keyword(string &lexeme, file_reader::file_reader &fr) {
         return TOK_TYPE::AS;
     else if(lexeme == "if") {
         //check for else in "if else"
-        if(fr.has_next(" else")) return TOK_TYPE::IF_ELSE;
+        if(fr.has_next(" else")) { 
+            lexeme += " else";
+            return TOK_TYPE::IF_ELSE;
+        }
         return TOK_TYPE::IF;
     }
     else if(lexeme == "else")

@@ -34,14 +34,14 @@ int main(int argc, char** argv) {
             failed_tests++;
 
             cout << "[ ❌ ] Test failed: -- \"" << test.name << "\"" << endl;
-            cout << "       ↳ [" << KCYN << err.test_name << RST << "] " << "\"" << err.reason << "\"" << endl;
+            cout << "\t\t↳ [" << KCYN << err.test_name << RST << "] " << "\"" << err.reason << "\"" << endl;
         }
     }
 
     cout << endl;
     cout << "[-] " << FMAG("Tests completed:") << endl;
-    cout << FGRN("\tPassed: ") << (tests.size() - failed_tests) << endl;
-    cout << FRED("\tFailed: ") << failed_tests << endl;
+    cout << FGRN("\t↳ Passed: ") << (tests.size() - failed_tests) << endl;
+    cout << FRED("\t↳ Failed: ") << failed_tests << endl;
 
     return 0;
 }

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "file_reader.hpp"
 
 using namespace std;
@@ -37,13 +38,14 @@ char file_reader::file_reader::next() {
 
 /* Check if the source string has a pattern in the current read position */
 bool file_reader::file_reader::has_next(string pattern, bool consume) {
-    if(it+pattern.size() >= source->end()) return false;
+    string::iterator tit = it; //make a temporary iterator (t-it)
 
     for(size_t i=0; i<pattern.size(); i++) {
-        if(*(it+i) != pattern[i]) return false;
+        if(tit >= source->end()) return false;
+        if(*(tit++) != pattern[i]) return false;
     }
 
-    if(consume) it+=pattern.size();
+    if(consume) it = tit;
 
     return true;
 }
