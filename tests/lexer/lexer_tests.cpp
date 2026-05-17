@@ -32,14 +32,20 @@ void load_lexer_tests(vector<test_t> &tests) {
     tests.emplace_back("Identifier 1", [&]{ test_type_lex("x", TOK_TYPE::IDENTIFIER, "x"); });
     tests.emplace_back("Identifier 2", [&]{ test_type_lex("h3ll0", TOK_TYPE::IDENTIFIER, "h3ll0"); });
 
+    tests.emplace_back(TEST_NAME_FOR_SPACE, []{});
+
     tests.emplace_back("Digit 1", [&]{ test_type_lex("23", TOK_TYPE::INT_LITERAL, "23"); });
     tests.emplace_back("Digit 2", [&]{ test_type_lex("23.3", TOK_TYPE::FLOAT_LITERAL, "23.3"); });
     tests.emplace_back("Digit 3", [&]{ test_type_lex("23.", TOK_TYPE::FLOAT_LITERAL, "23."); });
     tests.emplace_back("Digit 4", [&]{ test_type_lex("23.3", TOK_TYPE::FLOAT_LITERAL, "23.3"); });
 
+    tests.emplace_back(TEST_NAME_FOR_SPACE, []{});
+
     tests.emplace_back("String literal", [&]{ test_type_lex("\"Hello World!\"", TOK_TYPE::STRING_LITERAL, "\"Hello World!\""); });
     tests.emplace_back("String literal - unclosed", [&]{ test_type_lex("\"Hello World!", TOK_TYPE::STRING_LITERAL, "", true); });
     tests.emplace_back("String literal - newline unclosed", [&]{ test_type_lex("\"Hello Wor\nld!\"", TOK_TYPE::STRING_LITERAL, "", true); });
+
+    tests.emplace_back(TEST_NAME_FOR_SPACE, []{});
 
     //testing keywords
     tests.emplace_back("keyword: use", [&]{ test_type_lex("use", TOK_TYPE::USE, "use"); });
@@ -51,4 +57,6 @@ void load_lexer_tests(vector<test_t> &tests) {
     tests.emplace_back("keyword: num", [&]{ test_type_lex("num", TOK_TYPE::NUMBER_TYPE, "num"); });
     tests.emplace_back("keyword: float", [&]{ test_type_lex("float", TOK_TYPE::FLOAT_TYPE, "float"); });
     tests.emplace_back("keyword: string", [&]{ test_type_lex("string", TOK_TYPE::STRING_TYPE, "string"); });
+
+    tests.emplace_back(TEST_NAME_FOR_SPACE, []{});
 }

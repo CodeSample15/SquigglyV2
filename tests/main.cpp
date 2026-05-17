@@ -23,9 +23,17 @@ int main(int argc, char** argv) {
     }
 
     int failed_tests = 0;
+    int total_tests = 0;
 
     //run tests
     for(test_t &test : tests) {
+        if(test.name == TEST_NAME_FOR_SPACE) {
+            cout << "--------------------------------" << endl;
+            continue;
+        }
+
+        total_tests++;
+
         try {
             test.test_fun();
 
@@ -40,7 +48,7 @@ int main(int argc, char** argv) {
 
     cout << endl;
     cout << "[-] " << FMAG("Tests completed:") << endl;
-    cout << FGRN("\t↳ Passed: ") << (tests.size() - failed_tests) << endl;
+    cout << FGRN("\t↳ Passed: ") << (total_tests - failed_tests) << endl;
     cout << FRED("\t↳ Failed: ") << failed_tests << endl;
 
     return 0;

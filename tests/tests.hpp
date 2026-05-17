@@ -4,6 +4,9 @@
 #include <functional>
 #include <vector>
 
+//use this as the test name to print a space in the test segment
+#define TEST_NAME_FOR_SPACE "SPACE"
+
 struct test_fail {
     std::string test_name;
     std::string reason;
