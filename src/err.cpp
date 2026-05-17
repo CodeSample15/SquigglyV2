@@ -18,6 +18,10 @@ std::string errmsg(ERR_TYPE t) {
             return "NOT IMPLEMENTED";
         case ERR_TYPE::UNKNOWN_CHARACTER:
             return "Uknown character in source";
+        case ERR_TYPE::UNCLOSED_QUOTE:
+            return "Expected closing quote";
+        case ERR_TYPE::UNRECOGNIZED_PATTERN:
+            return "Unrecognized pattern in source code";
         default:
             return "Unimplemented Error Message";
     }
