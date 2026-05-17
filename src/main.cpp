@@ -6,13 +6,14 @@
 using namespace std;
 
 int main(int argc, char** argv) {
+    string input = "(){}[]&";
+
     try {
-        string input = "(){}[]&";
         vector<Token> tokens = lex(input);
         print_tokens(tokens);
     } 
     catch (ScribbleErr e) {
-        PrintSErrMessage(e);
+        PrintSErrMessage(e, input);
     }
 
     return 0;

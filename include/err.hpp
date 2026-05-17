@@ -27,4 +27,4 @@ struct ScribbleErr {
     ERR_TYPE type;
 };
 
-void PrintSErrMessage(ScribbleErr err);
+void PrintSErrMessage(ScribbleErr err, std::string &source);
