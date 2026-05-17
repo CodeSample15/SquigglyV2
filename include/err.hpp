@@ -9,6 +9,7 @@ typedef enum {
     // lexer errors
     UNKNOWN_CHARACTER,
     UNCLOSED_QUOTE,
+    UNRECOGNIZED_PATTERN,
 
     // parser errors
 

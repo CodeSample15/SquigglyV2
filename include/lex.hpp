@@ -62,6 +62,7 @@ enum TOK_TYPE {
     AND,                            // &&
     OR,                             // ||
     NOT,                            // !
+    CMP_EQUALS,                     // ==
     
     //ignored (stripped from lexer output)
     WHITESPACE,

@@ -45,6 +45,7 @@ Tokens types able to be lexed:
 - [] built_in_variable_ref
 - [] special_function_prefix
 - [] and, or, not
+- [] cmp_equals
 - [] whitespace, comment
 
 ### Parser:
