@@ -2,6 +2,59 @@
 
 Squiggly but actually useful
 
+## Progress
+
+### Lexer:
+
+Tokens types able to be lexed:
+
+- [X] use
+- [X] as
+- [X] if
+- [X] if_else
+- [X] else
+- [X] function_define
+- [X] number_type
+- [X] float_type
+- [X] string_type
+- [X] identifier
+- [X] string_literal
+- [X] int_literal
+- [X] float_literal
+- [] open_param, close_paren
+- [] open_curly, close_curly
+- [] open_bracket, close_bracket
+- [] semicolon
+- [] comma
+- [] plus
+- [] minus
+- [] slash
+- [] star
+- [] bar
+- [] up_arrow
+- [] greater_than
+- [] less_than
+- [] shift_right, shift_left
+- [] equals
+- [] plus_equals
+- [] minus_equals
+- [] slash_equals
+- [] star_equals
+- [] incr, decr
+- [] image_ref
+- [] built_in_variable_ref
+- [] special_function_prefix
+- [] and, or, not
+- [] whitespace, comment
+
+### Parser:
+
+*Not started*
+
+### Interpreter:
+
+*Not started*
+
 ## Language Grammar
 ```EBNF
 program = {import_statement} , {core_function | function_def | variable_def | }
@@ -88,3 +141,5 @@ fun coroutine() {
     }
 }
 ```
+
+==
