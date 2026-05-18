@@ -36,9 +36,9 @@ public:
     /* Get the next item in the source string and consume it */
     char next();
 
-    /* Check if the source string has a pattern in the current read position */
-    bool has_next(std::string pattern, bool consume=true);
-    bool has_next(std::string pattern, std::string &lexeme);
+    /* Check if the source string has a pattern in the current read position. If strict, no other letters can exist immediately after the pattern */
+    bool has_next(std::string pattern, bool strict=true, bool consume=true);
+    bool has_next(std::string pattern, std::string &lexeme, bool strict=true);
     
     src_loc loc;
 

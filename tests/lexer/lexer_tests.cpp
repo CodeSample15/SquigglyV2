@@ -78,6 +78,27 @@ void load_lexer_tests(vector<test_t> &tests) {
 
     tests.emplace_back(TEST_NAME_FOR_SPACE, []{});
 
+    //make sure things like 'if else' only lex as an if-else token if there are no invalid characters following the pattern
+    tests.emplace_back("has_next can't be tricked", [&]{ 
+        test_multiple_types("if elsee", {
+            TOK_TYPE::IF, TOK_TYPE::WHITESPACE, TOK_TYPE::IDENTIFIER
+        }); 
+    });
+
+    tests.emplace_back("has_next ignores non alpha", [&]{ 
+        test_multiple_types("if else{", {
+            TOK_TYPE::IF_ELSE, TOK_TYPE::OPEN_CURLY
+        }); 
+    });
+
+    tests.emplace_back("has_next ignores non alpha 2", [&]{ 
+        test_multiple_types("if else {", {
+            TOK_TYPE::IF_ELSE, TOK_TYPE::WHITESPACE, TOK_TYPE::OPEN_CURLY
+        }); 
+    });
+
+    tests.emplace_back(TEST_NAME_FOR_SPACE, []{});
+
     //testing sequences
     tests.emplace_back("symbols", [&]{ 
         test_multiple_types("(){}[];,+-/*|^><>=<=>><<=+=-=/=*=++--@$:&&||! == !=", {

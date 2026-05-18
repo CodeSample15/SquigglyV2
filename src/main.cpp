@@ -6,7 +6,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    string input = "(){}[];,+-/*|^><>=<=>><<=+=-=/=*=++--@$:&&||! == !=";
+    string input = "if elsee";
 
     try {
         vector<Token> tokens = lex(input);
