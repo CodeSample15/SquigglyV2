@@ -1,56 +1,45 @@
 # Scribble
 
-Squiggly but actually useful
+Make really simple games through a language that's built for that very purpose. 
+
+## Purpose and goals
+
+Scribble's aim is to be similar to its precursor [Squiggly](https://github.com/CodeSample15/Squiggly) while being faster, more robust, and easier to develop. 
+
+There are countless ways to develop video games and graphical applications. However, there's a few issues I have with modern methods that I aim to fix with Scribble:
+
+ - Most languages require you to find libraries to create a graphical interface and input manager for their application. This can lead to version issues, annoying linker errors, and confusion for first time developers.
+    - Scribble comes with built in features to handle this, making it so that the user can immediately focus on what goes on the screen, not how it does so.
+ - Distributing applications
+    - Scribble will aim to run code on as many platforms as possible... including web. This means that users can write code for one device and safely share their code with others.
+ - Security issues
+    - Scribble has no way to interface directly with local files, make unsafe system calls, or anything similar. This means that users can execute other's Scribble files immediately after downloading without fear of accidentally running malware.
+- Fun and education
+    - Modern day programming education is very focused around using LLMs to write code. In my opinion, this takes the joy out of learning to code, especially for new developers. This language aims to provide a simple syntax that is both fun to use and teaches new developers how to think like a programmer, without having to rely on prompting.
+    - The idea isn't to develop the next hackathon-winning app with this language, but instead just focus on making something cool for others to enjoy, while learning to think programmatically along the way.
 
 ## Progress
 
 ### Lexer:
 
-Tokens types able to be lexed:
-
-- [X] use
-- [X] as
-- [X] if
-- [X] if_else
-- [X] else
-- [X] function_define
-- [X] number_type
-- [X] float_type
-- [X] string_type
-- [X] identifier
-- [X] string_literal
-- [X] int_literal
-- [X] float_literal
-- [] open_param, close_paren
-- [] open_curly, close_curly
-- [] open_bracket, close_bracket
-- [] semicolon
-- [] comma
-- [] plus
-- [] minus
-- [] slash
-- [] star
-- [] bar
-- [] up_arrow
-- [] greater_than
-- [] less_than
-- [] shift_right, shift_left
-- [] equals
-- [] plus_equals
-- [] minus_equals
-- [] slash_equals
-- [] star_equals
-- [] incr, decr
-- [] image_ref
-- [] built_in_variable_ref
-- [] special_function_prefix
-- [] and, or, not
-- [] cmp_equals
-- [] whitespace, comment
+- [X] Lex all tokens needed for parser
+- [X] Comprehensive error reporting
+- [X] Tests
+- [ ] Edge case handling (invalid float literals?)
 
 ### Parser:
 
-*Not started*
+- [ ] Program
+- [ ] import_statement
+- [ ] function_def
+    - [ ] function_modifier
+    - [ ] parameters
+    - [ ] body
+- [ ] variable_def
+    - [ ] vartype
+- [ ] Core function
+    - [ ] start_func
+    - [ ] update_func
 
 ### Interpreter:
 
@@ -113,7 +102,7 @@ expression          =
 
 NB: Grammar assumes whitespace has been stripped from the output of the lexer 
 
-## Demo
+## Example
 
 ```rust
 use my_library as lib
