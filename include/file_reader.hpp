@@ -38,6 +38,7 @@ public:
 
     /* Check if the source string has a pattern in the current read position */
     bool has_next(std::string pattern, bool consume=true);
+    bool has_next(std::string pattern, std::string &lexeme);
     
     src_loc loc;
 

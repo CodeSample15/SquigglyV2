@@ -49,3 +49,17 @@ bool file_reader::file_reader::has_next(string pattern, bool consume) {
 
     return true;
 }
+
+bool file_reader::file_reader::has_next(std::string pattern, std::string &lexeme) {
+    string::iterator tit = it; //make a temporary iterator (t-it)
+
+    for(size_t i=0; i<pattern.size(); i++) {
+        if(tit >= source->end()) return false;
+        if(*(tit++) != pattern[i]) return false;
+    }
+
+    it = tit; //consume since we found the pattern
+    lexeme += pattern;
+
+    return true;
+}

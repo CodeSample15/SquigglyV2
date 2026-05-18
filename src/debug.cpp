@@ -41,6 +41,8 @@ string tok_type_to_string(TOK_TYPE tok) {
         case UP_ARROW: return "up arrow";
         case GREATER_THAN: return "greater than";
         case LESS_THAN: return "less than";
+        case GREATER_THAN_EQUAL: return "greater than / equal to";
+        case LESS_THAN_EQUAL: return "less than / equal to";
         case SHIFT_RIGHT: return "shift right";
         case SHIFT_LEFT: return "shift left";
         case EQUALS: return "equals";
@@ -56,6 +58,8 @@ string tok_type_to_string(TOK_TYPE tok) {
         case AND: return "and";
         case OR: return "or";
         case NOT: return "not";
+        case CMP_EQUALS: return "equal to";
+        case CMP_NOT_EQUALS: return "not equal";
         case WHITESPACE: return "whitespace";
         case COMMENT: return "comment";
         case OTHER: return "other";

@@ -33,6 +33,8 @@ vector<Token> lex(string &source)
             type = handle_alpha(fr, lexeme);
         else if(isdigit(c))
             type = handle_digit(fr, lexeme);
+        else if(c == '"')
+            type = handle_string(fr, lexeme);
         else
             type = handle_others(fr, lexeme);
 
@@ -99,7 +101,6 @@ TOK_TYPE handle_others(file_reader::file_reader &fr, string &lexeme) {
     lexeme += next;
 
     switch(next) {
-        case '"': return handle_string(fr, lexeme);
         case '(': return TOK_TYPE::OPEN_PAREN;
         case ')': return TOK_TYPE::CLOSE_PAREN;
         case '{': return TOK_TYPE::OPEN_CURLY;
@@ -109,60 +110,68 @@ TOK_TYPE handle_others(file_reader::file_reader &fr, string &lexeme) {
         case ';': return TOK_TYPE::SEMICOLON;
         case ',': return TOK_TYPE::COMMA;
         case '+': 
-            if(fr.has_next("="))
+            if(fr.has_next("=", lexeme))
                 return TOK_TYPE::PLUS_EQUALS;
-            else if(fr.has_next("+")) 
+            else if(fr.has_next("+", lexeme))
                 return TOK_TYPE::INCR;
             else
                 return TOK_TYPE::PLUS;
         case '-':
-            if(fr.has_next("="))    
+            if(fr.has_next("=", lexeme))    
                 return TOK_TYPE::MINUS_EQUALS;
-            else if(fr.has_next("-")) 
+            else if(fr.has_next("-", lexeme)) 
                 return TOK_TYPE::DECR;
             else
                 return TOK_TYPE::MINUS;
         case '/':
-            if(fr.has_next("="))
+            if(fr.has_next("=", lexeme))
                 return TOK_TYPE::SLASH_EQUALS;
             else
                 return TOK_TYPE::SLASH;
         case '*':
-            if(fr.has_next("="))
+            if(fr.has_next("=", lexeme))
                 return TOK_TYPE::STAR_EQUALS;
             else
                 return TOK_TYPE::STAR;
         case '|': 
-            if(fr.has_next("|"))    
+            if(fr.has_next("|", lexeme))    
                 return TOK_TYPE::OR;
             else
                 return TOK_TYPE::BAR;
         case '>': 
-            if(fr.has_next(">"))
+            if(fr.has_next(">", lexeme))
                 return TOK_TYPE::SHIFT_RIGHT;
+            else if(fr.has_next("=", lexeme))
+                return TOK_TYPE::GREATER_THAN_EQUAL;
             else
                 return TOK_TYPE::GREATER_THAN;
         case '<':
-            if(fr.has_next("<"))
+            if(fr.has_next("<", lexeme))
                 return TOK_TYPE::SHIFT_LEFT;
+            else if(fr.has_next("=", lexeme))
+                return TOK_TYPE::LESS_THAN_EQUAL;
             else
                 return TOK_TYPE::LESS_THAN;
         case '=':
-            if(fr.has_next("="))
+            if(fr.has_next("=", lexeme))
                 return TOK_TYPE::CMP_EQUALS;
             else
                 return TOK_TYPE::EQUALS;
         case '&':
-            if(fr.has_next("&"))
+            if(fr.has_next("&", lexeme))
                 return TOK_TYPE::AND;
             else
                 throw (ScribbleErr) { fr.loc.row, fr.loc.col, ERR_TYPE::UNRECOGNIZED_PATTERN };
             return TOK_TYPE::OTHER;
+        case '!': 
+            if(fr.has_next("=", lexeme))
+                return TOK_TYPE::CMP_NOT_EQUALS;
+            else
+                return TOK_TYPE::NOT;
         case '^': return TOK_TYPE::UP_ARROW;
         case '@': return TOK_TYPE::IMAGE_REF;
         case '$': return TOK_TYPE::BUILT_IN_VARIABLE_REF;
         case ':': return TOK_TYPE::SPECIAL_FUNCTION_PREFIX;
-        case '!': return TOK_TYPE::NOT;
         case ' ':
         case '\n':
         case '\t':
@@ -183,8 +192,7 @@ TOK_TYPE check_is_keyword(string &lexeme, file_reader::file_reader &fr) {
         return TOK_TYPE::AS;
     else if(lexeme == "if") {
         //check for else in "if else"
-        if(fr.has_next(" else")) { 
-            lexeme += " else";
+        if(fr.has_next(" else", lexeme)) { 
             return TOK_TYPE::IF_ELSE;
         }
         return TOK_TYPE::IF;
