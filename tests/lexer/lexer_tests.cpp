@@ -41,7 +41,7 @@ void test_multiple_types(string input, vector<TOK_TYPE> expected) {
 
     for(size_t i=0; i<out.size(); i++) {
         if(out[i].type != expected[i])
-            throw (test_fail) {"Type test", "Incorrect type produced from lexer"};
+            throw (test_fail) {"Type test", "Incorrect type produced from lexer. Expected |" + tok_type_to_string(expected[0]) + "|, got |" + tok_type_to_string(out[i].type) + "|"};
     }
 }
 
@@ -80,7 +80,7 @@ void load_lexer_tests(vector<test_t> &tests) {
 
     //testing sequences
     tests.emplace_back("symbols", [&]{ 
-        test_multiple_types("(){}[];,+-/*|^><>=<=>><<=+=-=/=*=++--@$:&&||!==!=", {
+        test_multiple_types("(){}[];,+-/*|^><>=<=>><<=+=-=/=*=++--@$:&&||! == !=", {
             TOK_TYPE::OPEN_PAREN, TOK_TYPE::CLOSE_PAREN,
             TOK_TYPE::OPEN_CURLY, TOK_TYPE::CLOSE_CURLY,
             TOK_TYPE::OPEN_BRACKET, TOK_TYPE::CLOSE_BRACKET,
@@ -98,7 +98,11 @@ void load_lexer_tests(vector<test_t> &tests) {
             TOK_TYPE::IMAGE_REF,
             TOK_TYPE::BUILT_IN_VARIABLE_REF,
             TOK_TYPE::SPECIAL_FUNCTION_PREFIX,
-            TOK_TYPE::AND, TOK_TYPE::OR, TOK_TYPE::NOT, TOK_TYPE::CMP_EQUALS, TOK_TYPE::CMP_NOT_EQUALS
+            TOK_TYPE::AND, TOK_TYPE::OR, TOK_TYPE::NOT, 
+            TOK_TYPE::WHITESPACE,
+            TOK_TYPE::CMP_EQUALS, 
+            TOK_TYPE::WHITESPACE,
+            TOK_TYPE::CMP_NOT_EQUALS
         });
     });
 }
