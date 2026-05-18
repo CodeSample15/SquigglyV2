@@ -99,6 +99,7 @@ TOK_TYPE handle_others(file_reader::file_reader &fr, string &lexeme) {
     lexeme += next;
 
     switch(next) {
+        case '"': return handle_string(fr, lexeme);
         case '(': return TOK_TYPE::OPEN_PAREN;
         case ')': return TOK_TYPE::CLOSE_PAREN;
         case '{': return TOK_TYPE::OPEN_CURLY;
@@ -162,6 +163,10 @@ TOK_TYPE handle_others(file_reader::file_reader &fr, string &lexeme) {
         case '$': return TOK_TYPE::BUILT_IN_VARIABLE_REF;
         case ':': return TOK_TYPE::SPECIAL_FUNCTION_PREFIX;
         case '!': return TOK_TYPE::NOT;
+        case ' ':
+        case '\n':
+        case '\t':
+            return TOK_TYPE::WHITESPACE;
         default:
             throw (ScribbleErr) { fr.loc.row, fr.loc.col, ERR_TYPE::UNKNOWN_CHARACTER };
             return TOK_TYPE::OTHER;

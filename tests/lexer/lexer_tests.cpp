@@ -14,7 +14,7 @@ void test_type_lex(string input, TOK_TYPE expected_type, string expected_lexeme,
         if(should_fail) throw (test_fail) {"Type/Lexeme test", "Lex didn't fail when it should have.\n"};
     } catch(ScribbleErr &e) {
         if(should_fail) return;
-        PrintSErrMessage(e);
+        PrintSErrMessage(e, input);
         throw (test_fail) {"Type/Lexeme test", "Lex failed"};
     }
 
@@ -26,6 +26,24 @@ void test_type_lex(string input, TOK_TYPE expected_type, string expected_lexeme,
         throw (test_fail) {"Type/Lexeme test", "Expected lexeme '" + expected_lexeme + "', got '" + out[0].lexeme + "'"};
 }
 
+void test_multiple_types(string input, vector<TOK_TYPE> expected) {
+    vector<Token> out;
+
+    try {
+        out = lex(input);
+    } catch(ScribbleErr &e) {
+        PrintSErrMessage(e, input);
+        throw (test_fail) {"Type/Lexeme test", "Lex failed"};
+    }
+
+    if(out.size() != expected.size())
+        throw (test_fail) {"Type test", "Out size (" + to_string(out.size()) + ") does not match expected size (" + to_string(expected.size()) + ")"};
+
+    for(size_t i=0; i<out.size(); i++) {
+        if(out[i].type != expected[i])
+            throw (test_fail) {"Type test", "Incorrect type produced from lexer"};
+    }
+}
 
 void load_lexer_tests(vector<test_t> &tests) {
     //testing literals
@@ -59,4 +77,27 @@ void load_lexer_tests(vector<test_t> &tests) {
     tests.emplace_back("keyword: string", [&]{ test_type_lex("string", TOK_TYPE::STRING_TYPE, "string"); });
 
     tests.emplace_back(TEST_NAME_FOR_SPACE, []{});
+
+    //testing sequences
+    tests.emplace_back("symbols", [&]{ 
+        test_multiple_types("(){}[];,+-/*|^><>><<=+=-=/=*=++--@$:&&||!==", {
+            TOK_TYPE::OPEN_PAREN, TOK_TYPE::CLOSE_PAREN,
+            TOK_TYPE::OPEN_CURLY, TOK_TYPE::CLOSE_CURLY,
+            TOK_TYPE::OPEN_BRACKET, TOK_TYPE::CLOSE_BRACKET,
+            TOK_TYPE::SEMICOLON,
+            TOK_TYPE::COMMA,
+            TOK_TYPE::PLUS, TOK_TYPE::MINUS, TOK_TYPE::SLASH, TOK_TYPE::STAR,
+            TOK_TYPE::BAR,
+            TOK_TYPE::UP_ARROW,
+            TOK_TYPE::GREATER_THAN, TOK_TYPE::LESS_THAN,
+            TOK_TYPE::SHIFT_RIGHT, TOK_TYPE::SHIFT_LEFT,
+            TOK_TYPE::EQUALS,
+            TOK_TYPE::PLUS_EQUALS, TOK_TYPE::MINUS_EQUALS, TOK_TYPE::SLASH_EQUALS, TOK_TYPE::STAR_EQUALS,
+            TOK_TYPE::INCR, TOK_TYPE::DECR,
+            TOK_TYPE::IMAGE_REF,
+            TOK_TYPE::BUILT_IN_VARIABLE_REF,
+            TOK_TYPE::SPECIAL_FUNCTION_PREFIX,
+            TOK_TYPE::AND, TOK_TYPE::OR, TOK_TYPE::NOT, TOK_TYPE::CMP_EQUALS
+        });
+    });
 }

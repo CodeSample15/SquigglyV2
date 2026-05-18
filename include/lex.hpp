@@ -41,6 +41,8 @@ enum TOK_TYPE {
     UP_ARROW,                       // ^
     GREATER_THAN,                   // >
     LESS_THAN,                      // <
+    GREATER_THAN_EQUAL,             // >=
+    LESS_THAN_EQUAL,                // <=
     SHIFT_RIGHT,                    // >>
     SHIFT_LEFT,                     // <<
 
@@ -63,6 +65,7 @@ enum TOK_TYPE {
     OR,                             // ||
     NOT,                            // !
     CMP_EQUALS,                     // ==
+    CMP_NOT_EQUALS,                 // !=
     
     //ignored (stripped from lexer output)
     WHITESPACE,

@@ -14,8 +14,10 @@ int main(int argc, char** argv) {
     vector<test_t> tests;
     if(argc != 1) {
         for(int i=0; i<argc; i++) {
-            if(strcmp(argv[i], "lex")==0)
+            if(strcmp(argv[i], "lex")==0) {
+                cout << "Testing Lexer:" << endl;
                 load_lexer_tests(tests);
+            }
         }
     } else {
         //load all tests
