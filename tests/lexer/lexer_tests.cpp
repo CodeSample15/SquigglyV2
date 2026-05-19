@@ -126,4 +126,39 @@ void load_lexer_tests(vector<test_t> &tests) {
             TOK_TYPE::CMP_NOT_EQUALS
         });
     });
+
+    tests.emplace_back(TEST_NAME_FOR_SPACE, []{});
+
+    //testing comments
+    tests.emplace_back("comments work in single line", [&]{ 
+        test_multiple_types("#hi there", {
+            TOK_TYPE::COMMENT
+        }); 
+    });
+
+    tests.emplace_back("comments stop after line", [&]{ 
+        test_multiple_types("#hi there\nx", {
+            TOK_TYPE::COMMENT, TOK_TYPE::IDENTIFIER
+        }); 
+    });
+
+    tests.emplace_back("comments work with tokens on same line", [&]{ 
+        test_multiple_types("+#hi there\nx", {
+            TOK_TYPE::PLUS, TOK_TYPE::COMMENT, TOK_TYPE::IDENTIFIER
+        }); 
+    });
+
+    tests.emplace_back("comments work on new line", [&]{ 
+        test_multiple_types("x\n#hi there\nx", {
+            TOK_TYPE::IDENTIFIER, TOK_TYPE::WHITESPACE, TOK_TYPE::COMMENT, TOK_TYPE::IDENTIFIER
+        }); 
+    });
+
+    tests.emplace_back("multiple comments", [&]{ 
+        test_multiple_types("#comment 1\n#hi there\nx", {
+            TOK_TYPE::COMMENT, TOK_TYPE::COMMENT, TOK_TYPE::IDENTIFIER
+        }); 
+    });
+
+    tests.emplace_back(TEST_NAME_FOR_SPACE, []{});
 }
