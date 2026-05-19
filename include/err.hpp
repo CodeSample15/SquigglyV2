@@ -12,6 +12,7 @@ typedef enum {
     UNRECOGNIZED_PATTERN,
 
     // parser errors
+    EXPECTED,
 
     // runtime errors
 } ERR_TYPE;
@@ -24,6 +25,7 @@ typedef enum {
 struct ScribbleErr {
     size_t line;
     size_t col;
+    std::string msg;
     ERR_TYPE type;
 };
 

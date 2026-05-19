@@ -1,5 +1,5 @@
 #include "lex.hpp"
-#include "file_reader.hpp"
+#include "utils/file_reader.hpp"
 #include "err.hpp"
 
 using namespace std;
@@ -89,7 +89,7 @@ TOK_TYPE handle_string(file_reader::file_reader &fr, string &lexeme) {
         lexeme += fr.next();
     }
 
-    if(fr.empty() || fr.peek() == '\n') throw (ScribbleErr) { fr.loc.row, fr.loc.col, ERR_TYPE::UNCLOSED_QUOTE };
+    if(fr.empty() || fr.peek() == '\n') throw (ScribbleErr) { fr.loc.row, fr.loc.col, "", ERR_TYPE::UNCLOSED_QUOTE };
 
     lexeme += fr.next(); //get the last quote added to the lexeme
 
@@ -161,7 +161,7 @@ TOK_TYPE handle_others(file_reader::file_reader &fr, string &lexeme) {
             if(fr.has_next("&", lexeme))
                 return TOK_TYPE::AND;
             else
-                throw (ScribbleErr) { fr.loc.row, fr.loc.col, ERR_TYPE::UNRECOGNIZED_PATTERN };
+                throw (ScribbleErr) { fr.loc.row, fr.loc.col, "", ERR_TYPE::UNRECOGNIZED_PATTERN };
             return TOK_TYPE::OTHER;
         case '!': 
             if(fr.has_next("=", lexeme))
@@ -177,7 +177,7 @@ TOK_TYPE handle_others(file_reader::file_reader &fr, string &lexeme) {
         case '\t':
             return TOK_TYPE::WHITESPACE;
         default:
-            throw (ScribbleErr) { fr.loc.row, fr.loc.col, ERR_TYPE::UNKNOWN_CHARACTER };
+            throw (ScribbleErr) { fr.loc.row, fr.loc.col, "", ERR_TYPE::UNKNOWN_CHARACTER };
             return TOK_TYPE::OTHER;
     }
 }

@@ -32,14 +32,22 @@ There are countless ways to develop video games and graphical applications. Howe
 - [ ] Program
 - [ ] import_statement
 - [ ] function_def
-    - [ ] function_modifier
-    - [ ] parameters
-    - [ ] body
+- [ ] function_modifier
+- [ ] parameters
+- [ ] body
 - [ ] variable_def
-    - [ ] vartype
+- [ ] vartype
 - [ ] Core function
-    - [ ] start_func
-    - [ ] update_func
+- [ ] start_func
+- [ ] update_func
+
+More abstract todo list:
+
+- [ ] General parser architecture
+- [ ] Node type enum
+- [ ] Fully functional AST setup
+- [ ] Parser tests
+- [ ] AST tests
 
 ### Interpreter:
 
