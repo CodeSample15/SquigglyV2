@@ -6,10 +6,11 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    string input = "if elsee";
+    string input = "hello #this is a comment\nhi";
 
     try {
         vector<Token> tokens = lex(input);
+        lex_strip(tokens);
         print_tokens(tokens);
     } 
     catch (ScribbleErr e) {

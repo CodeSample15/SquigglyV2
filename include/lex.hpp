@@ -89,3 +89,4 @@ struct Token {
     Throws a ScribbleErr (err.hpp), with a type of error 
 */
 std::vector<Token> lex(std::string &source);
+void lex_strip(std::vector<Token> &input); //strip away whitespace and comments

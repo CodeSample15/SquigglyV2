@@ -8,6 +8,7 @@ using namespace std;
 TOK_TYPE handle_alpha(file_reader::file_reader &fr, string &lexeme);
 TOK_TYPE handle_digit(file_reader::file_reader &fr, string &lexeme);
 TOK_TYPE handle_string(file_reader::file_reader &fr, string &lexeme);
+TOK_TYPE handle_comment(file_reader::file_reader &fr);
 TOK_TYPE handle_others(file_reader::file_reader &fr, string &lexeme);
 TOK_TYPE check_is_keyword(string &lexeme, file_reader::file_reader &fr);
 
@@ -35,6 +36,8 @@ vector<Token> lex(string &source)
             type = handle_digit(fr, lexeme);
         else if(c == '"')
             type = handle_string(fr, lexeme);
+        else if(c == '#')
+            type = handle_comment(fr);
         else
             type = handle_others(fr, lexeme);
 
@@ -50,6 +53,15 @@ vector<Token> lex(string &source)
     }
 
     return tokens;
+}
+
+//strip away whitespace and comments
+void lex_strip(std::vector<Token> &input) {
+    for(int i=input.size()-1; i>=0; i--) {
+        if(input[i].type==TOK_TYPE::WHITESPACE || input[i].type==TOK_TYPE::COMMENT) {
+            input.erase(input.begin()+i);
+        }
+    }
 }
 
 TOK_TYPE handle_alpha(file_reader::file_reader &fr, string &lexeme) {
@@ -94,6 +106,12 @@ TOK_TYPE handle_string(file_reader::file_reader &fr, string &lexeme) {
     lexeme += fr.next(); //get the last quote added to the lexeme
 
     return TOK_TYPE::STRING_LITERAL;
+}
+
+TOK_TYPE handle_comment(file_reader::file_reader &fr) {
+    fr.next();
+    while(!fr.empty() && fr.next() != '\n');
+    return TOK_TYPE::COMMENT;
 }
 
 TOK_TYPE handle_others(file_reader::file_reader &fr, string &lexeme) {
