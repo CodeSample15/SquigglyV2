@@ -20,14 +20,14 @@ There are countless ways to develop video games and graphical applications. Howe
 
 ## Progress
 
-### Lexer:
+### Lexer (version 1):
 
 - [X] Lex all tokens needed for parser
 - [X] Comprehensive error reporting
 - [X] Tests
 - [ ] Edge case handling (invalid float literals?)
 
-### Parser:
+### Parser (version 1):
 
 - [ ] Program
 - [ ] import_statement
@@ -43,7 +43,7 @@ There are countless ways to develop video games and graphical applications. Howe
 
 More abstract todo list:
 
-- [ ] General parser architecture
+- [X] General parser architecture
 - [ ] Node type enum
 - [ ] Fully functional AST setup
 - [ ] Parser tests

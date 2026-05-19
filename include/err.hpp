@@ -13,6 +13,7 @@ typedef enum {
 
     // parser errors
     EXPECTED,
+    EOT, // end of tokens
 
     // runtime errors
 } ERR_TYPE;
