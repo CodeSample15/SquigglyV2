@@ -5,6 +5,7 @@
 #include "tests.hpp"
 #include "Colors.hpp"
 #include "lexer/lexer_tests.hpp"
+#include "parser/parser_tests.hpp"
 
 using namespace std;
 
@@ -15,8 +16,11 @@ int main(int argc, char** argv) {
     if(argc != 1) {
         for(int i=0; i<argc; i++) {
             if(strcmp(argv[i], "lexer")==0) {
-                cout << "Testing Lexer:" << endl;
+                cout << "Loading Lexer Tests..." << endl;
                 load_lexer_tests(tests);
+            } else if(strcmp(argv[i], "parser")==0) {
+                cout << "Loading Parser Tests..." << endl;
+                load_parser_tests(tests);
             }
         }
     } else {
