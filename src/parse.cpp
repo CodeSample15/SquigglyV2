@@ -28,7 +28,7 @@ AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
             tie(_, nibbler) = require(nibbler, TOK_TYPE::COMMA);
             tie(tmp, nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
             idents.push_back(tmp);
-        } catch(ScribbleErr&) {}
+        } catch(ScribbleErr&) { break; }
     }
 
     nibbler = opt(nibbler, [&] (Nibbler nibbler) {
@@ -47,7 +47,7 @@ AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
 }
 
 AST_Nib_Pair_t parse_expression(Nibbler nibbler) {
-
+    return {_, nibbler};
 }
 
 //define helper functions
