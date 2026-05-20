@@ -14,7 +14,7 @@ enum NODE_TYPE {
 
     FUNCTION_MODIFIER, FUNCTION_CALL, ARGUMENTS, PARAMETERS,
 
-    IDENTIFIER,
+    IDENT,
 
     NON
 };
@@ -24,6 +24,9 @@ struct AST_Node {
     Token tok;
     std::vector<AST_Node> children;
 
+    AST_Node() {
+        this->type=NON;
+    }
     AST_Node(NODE_TYPE type) {
         this->type = type;
     }
