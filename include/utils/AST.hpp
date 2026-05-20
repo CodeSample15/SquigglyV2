@@ -26,9 +26,11 @@ struct AST_Node {
 
     AST_Node() {
         this->type=NON;
+        this->tok.type = TOK_TYPE::OTHER;
     }
     AST_Node(NODE_TYPE type) {
         this->type = type;
+        this->tok.type = TOK_TYPE::OTHER;
     }
 };
 

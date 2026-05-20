@@ -6,8 +6,12 @@ using namespace std;
 void print_tokens(vector<Token> &tokens) 
 {
     for(Token& tok : tokens) {
-        cout << "| " << tok_type_to_string(tok.type) << " | -- " << "line: " << tok.line << " -- cols: (" << tok.start_col << ", " << tok.end_col << ") -- [" << tok.lexeme << "]" << endl;
+        cout << token_to_string(tok) << endl;
     }
+}
+
+string token_to_string(Token tok) {
+    return "| " + tok_type_to_string(tok.type) + " | -- " + "line: " + to_string(tok.line) + " -- cols: (" + to_string(tok.start_col) + ", " + to_string(tok.end_col) + ") -- [" + tok.lexeme + "]";
 }
 
 string tok_type_to_string(TOK_TYPE tok) {
@@ -65,4 +69,58 @@ string tok_type_to_string(TOK_TYPE tok) {
         case OTHER: return "other";
         default: return "TOK NOT FOUND";
     }
+}
+
+std::string AST_node_type_to_string(NODE_TYPE node) {
+    switch(node) {
+        case PROGRAM: return "program";
+        case IMPORT_STATEMENT: return "import statement";
+        case CORE_FUNCTION: return "core function";
+        case FUNCTION_DEF: return "function def";
+        case VARIABLE_DEF: return "variable def";
+        case VARIABLE_ASSIGN: return "variable assign";
+        case START_FUNC: return "start func";
+        case UPDATE_FUNC: return "update func";
+        case VAR_TYPE: return "var type";
+        case BODY: return "body";
+        case BRANCH: return "branch";
+        case FUNCTION_MODIFIER: return "function modifier";
+        case FUNCTION_CALL: return "function call";
+        case ARGUMENTS: return "arguments";
+        case PARAMETERS: return "parameters";
+        case IDENT: return "identifier";
+        case NON: return "NON";
+
+        default: return "WARNING: NO TYPE TO STRING";
+    }
+}
+
+void print_AST(AST_Node &root) {
+    cout << AST_To_String(root, true, 0) << endl;
+}
+
+//helper function for printing AST
+static string get_tab_space(int tab);
+
+string AST_To_String(AST_Node &root, bool recursive, int layer) {
+    string res = get_tab_space(layer) + AST_node_type_to_string(root.type) + ": \n";
+    
+    if(root.tok.type != TOK_TYPE::OTHER)
+        res += get_tab_space(layer+1) + token_to_string(root.tok) + "\n";
+    
+    if(recursive && root.children.size() != 0) {
+        res += get_tab_space(layer+1) + "Children:\n";
+        for(auto& i : root.children)
+            res += AST_To_String(i, true, layer+2) + "\n";
+    }
+
+    return res;
+}
+
+string get_tab_space(int tab) {
+    string res = "";
+    for(int i=0; i<tab; i++) {
+        res += "   ";
+    }
+    return res;
 }

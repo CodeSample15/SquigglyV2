@@ -1,4 +1,6 @@
+#include <iostream>
 #include <string>
+
 #include "lex.hpp"
 #include "parse.hpp"
 #include "err.hpp"
@@ -7,16 +9,22 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    string input = "num i = 4;";
+    string input = "float i, j, k = 4;";
 
     try {
+        cout << "Lexing..." << endl;
         vector<Token> tokens = lex(input);
         lex_strip(tokens);
         print_tokens(tokens);
 
+        cout << endl;
+        cout << endl;
+
+        cout << "Parsing..." << endl;
         Nibbler nibbler(&tokens);
-        parse_variable_def(nibbler);
-    } 
+        AST_Node AST = parse_variable_def(nibbler).first;
+        print_AST(AST);
+    }
     catch (ScribbleErr e) {
         PrintSErrMessage(e, input);
     }
