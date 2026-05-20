@@ -6,7 +6,8 @@ using namespace std;
 AST_Nib_Pair_t alt_types(std::vector<TOK_TYPE> types, Nibbler nibbler);
 AST_Nib_Pair_t alt(std::vector<std::function< AST_Nib_Pair_t(Nibbler) >> funcs, Nibbler nibbler);
 AST_Nib_Pair_t require(Nibbler nibbler, TOK_TYPE type); //creates an AST_Node with type NON on success, throws ScribbleErr if not
-Nibbler opt(Nibbler nibbler, std::function< void(Nibbler) > func);
+Nibbler opt(Nibbler nibbler, std::function< Nibbler(Nibbler) > func);
+Nibbler many_0(Nibbler nibbler, std::function< Nibbler(Nibbler) > func);
 
 //useful variables
 static AST_Node _;
@@ -22,19 +23,18 @@ AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
     tie(t, nibbler) = alt_types({TOK_TYPE::STRING_TYPE, TOK_TYPE::NUMBER_TYPE, TOK_TYPE::FLOAT_TYPE}, nibbler);
     tie(idents[0], nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
 
-    while(true) {
-        try {
-            AST_Node tmp, _;
-            tie(_, nibbler) = require(nibbler, TOK_TYPE::COMMA);
-            tie(tmp, nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
-            idents.push_back(tmp);
-        } catch(ScribbleErr&) { break; }
-    }
+    nibbler = many_0(nibbler, [&](Nibbler n){
+        AST_Node tmp;
+        tie(_, nibbler) = require(nibbler, TOK_TYPE::COMMA);
+        tie(tmp, nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
+        idents.push_back(tmp);
+        return n;
+    });
 
-    nibbler = opt(nibbler, [&] (Nibbler nibbler) {
-        tie(_, nibbler) = require(nibbler, TOK_TYPE::EQUALS);
+    nibbler = opt(nibbler, [&] (Nibbler n) {
+        tie(_, n) = require(n, TOK_TYPE::EQUALS);
         //tie(expr, nibbler) = parse_expression()
-        return nibbler;
+        return n;
     });
 
     //construct final node
@@ -95,14 +95,22 @@ AST_Nib_Pair_t require(Nibbler nibbler, TOK_TYPE type) {
     return {tmp, nibbler};
 }
 
-Nibbler opt(Nibbler nibbler, std::function< void(Nibbler) > func) {
+Nibbler opt(Nibbler nibbler, std::function< Nibbler(Nibbler) > func) {
     try {
-        Nibbler n_copy = nibbler;
-        func(n_copy);
-        return n_copy; //return new position after successful run
+        return func(nibbler); //return new location
     } catch(ScribbleErr&) {}
 
     return nibbler; //return original location
+}
+
+Nibbler many_0(Nibbler nibbler, std::function< Nibbler(Nibbler) > func) {
+    while(true) {
+        try {
+            nibbler = func(nibbler);
+        } catch(ScribbleErr&) { break; }
+    }
+
+    return nibbler;
 }
 
 //define the Nibbler helper class
