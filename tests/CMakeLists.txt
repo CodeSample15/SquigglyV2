@@ -5,7 +5,7 @@ PROJECT (scribble_tests LANGUAGES CXX)
 add_compile_options(-Wall -Werror)
 
 # compile tests
-file( GLOB TESTS_SRC "*.cpp" "lexer/*.cpp" )
+file( GLOB TESTS_SRC "*.cpp" "lexer/*.cpp" "parser/*.cpp" )
 add_executable( scribble_tests ${TESTS_SRC} )
 
 #set up include directories for the main program

@@ -7,7 +7,7 @@ using namespace std;
 //helper prototypes
 TOK_TYPE handle_alpha(file_reader::file_reader &fr, string &lexeme);
 TOK_TYPE handle_digit(file_reader::file_reader &fr, string &lexeme);
-TOK_TYPE handle_string(file_reader::file_reader &fr, string &lexeme);
+TOK_TYPE handle_string(file_reader::file_reader &fr, string &lexeme, char start);
 TOK_TYPE handle_comment(file_reader::file_reader &fr);
 TOK_TYPE handle_others(file_reader::file_reader &fr, string &lexeme);
 TOK_TYPE check_is_keyword(string &lexeme, file_reader::file_reader &fr);
@@ -34,8 +34,8 @@ vector<Token> lex(string &source)
             type = handle_alpha(fr, lexeme);
         else if(isdigit(c))
             type = handle_digit(fr, lexeme);
-        else if(c == '"')
-            type = handle_string(fr, lexeme);
+        else if(c == '"' || c == '\'')
+            type = handle_string(fr, lexeme, c);
         else if(c == '#')
             type = handle_comment(fr);
         else
@@ -94,10 +94,10 @@ TOK_TYPE handle_digit(file_reader::file_reader &fr, string &lexeme) {
     return found_dot ? TOK_TYPE::FLOAT_LITERAL : TOK_TYPE::INT_LITERAL;
 }
 
-TOK_TYPE handle_string(file_reader::file_reader &fr, string &lexeme) {
+TOK_TYPE handle_string(file_reader::file_reader &fr, string &lexeme, char start) {
     lexeme += fr.next();
     
-    while(!fr.empty() && fr.peek() != '"' && fr.peek() != '\n') {
+    while(!fr.empty() && fr.peek() != start && fr.peek() != '\n') {
         lexeme += fr.next();
     }
 

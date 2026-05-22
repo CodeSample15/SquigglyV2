@@ -45,6 +45,7 @@ enum TOK_TYPE {
     LESS_THAN_EQUAL,                // <=
     SHIFT_RIGHT,                    // >>
     SHIFT_LEFT,                     // <<
+    POW,                            // **
 
     EQUALS,                         // =
     PLUS_EQUALS,                    // +=
