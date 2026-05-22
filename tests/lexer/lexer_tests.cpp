@@ -104,7 +104,7 @@ void load_lexer_tests(vector<test_t> &tests) {
 
     //testing sequences
     tests.emplace_back("symbols", [&]{ 
-        test_multiple_types("(){}[];,+-/*|^><>=<=>><<=+=-=/=*=++--@$:&&||! == !=", {
+        test_multiple_types("(){}[];,+-/*|^><>=<=>><<=+=-=/=*=++--@$:&&||! == !=**", {
             TOK_TYPE::OPEN_PAREN, TOK_TYPE::CLOSE_PAREN,
             TOK_TYPE::OPEN_CURLY, TOK_TYPE::CLOSE_CURLY,
             TOK_TYPE::OPEN_BRACKET, TOK_TYPE::CLOSE_BRACKET,
@@ -126,7 +126,8 @@ void load_lexer_tests(vector<test_t> &tests) {
             TOK_TYPE::WHITESPACE,
             TOK_TYPE::CMP_EQUALS, 
             TOK_TYPE::WHITESPACE,
-            TOK_TYPE::CMP_NOT_EQUALS
+            TOK_TYPE::CMP_NOT_EQUALS,
+            TOK_TYPE::POW,
         });
     });
 

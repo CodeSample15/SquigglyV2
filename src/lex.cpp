@@ -149,6 +149,8 @@ TOK_TYPE handle_others(file_reader::file_reader &fr, string &lexeme) {
         case '*':
             if(fr.has_next("=", lexeme))
                 return TOK_TYPE::STAR_EQUALS;
+            else if(fr.has_next("*", lexeme))
+                return TOK_TYPE::POW;
             else
                 return TOK_TYPE::STAR;
         case '|': 
