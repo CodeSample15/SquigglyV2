@@ -46,8 +46,74 @@ AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
     return {res, nibbler};
 }
 
+//['$'] , identifier , ['[' , expression , {',' expression} ']']
+AST_Nib_Pair_t parse_variable_reference(Nibbler nibbler) {
+
+}
+
+//exp_andl , { '||' , exp_andl }
 AST_Nib_Pair_t parse_expression(Nibbler nibbler) {
     return {_, nibbler};
+}
+
+//exp_or , { '&' , exp_or }
+AST_Nib_Pair_t parse_exp_andl(Nibbler nibbler) {
+
+}
+
+//exp_xor , { '|' , exp_xor }
+AST_Nib_Pair_t parse_exp_or(Nibbler nibbler) {
+
+}
+
+//exp_and , { '^' , exp_and }
+AST_Nib_Pair_t parse_exp_xor(Nibbler nibbler) {
+
+}
+
+//exp_eq , { '&' , exp_and }
+AST_Nib_Pair_t parse_exp_and(Nibbler nibbler) {
+
+}
+
+//exp_cmp , { ('==' | '!=') , exp_cmp }
+AST_Nib_Pair_t parse_exp_eq(Nibbler nibbler) {
+
+}
+
+//exp_shft , { ('<' | '<=' | '>' | '>=') , exp_shft }
+AST_Nib_Pair_t parse_exp_cmp(Nibbler nibbler) {
+
+}
+
+//exp_add , { ('<<' , '>>') , exp_add }
+AST_Nib_Pair_t parse_exp_shft(Nibbler nibbler) {
+
+}
+
+//exp_mult , { ('+' | '-') , exp_mult }
+AST_Nib_Pair_t parse_exp_add(Nibbler nibbler) {
+
+}
+
+//exp_pow , { ('*' | '/' | '%') , exp_pow }
+AST_Nib_Pair_t parse_exp_mult(Nibbler nibbler) {
+
+}
+
+//exp_not , [ '**' , exp_pow ]
+AST_Nib_Pair_t parse_exp_pow(Nibbler nibbler) {
+
+}
+
+//['!'] , exp_primary
+AST_Nib_Pair_t parse_exp_not(Nibbler nibbler) {
+
+}
+
+//variable_reference | literal | '(' , expression , ')' | function_call
+AST_Nib_Pair_t parse_exp_primary(Nibbler nibbler) {
+    
 }
 
 //define helper functions

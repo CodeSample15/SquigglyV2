@@ -25,5 +25,27 @@ private:
 
 //main parse functions
 AST_Nib_Pair_t parse_program(Nibbler nibbler);
+
+//variable related
+AST_Nib_Pair_t parse_vartype(Nibbler nibbler);
 AST_Nib_Pair_t parse_variable_def(Nibbler nibbler);
+AST_Nib_Pair_t parse_variable_reference(Nibbler nibbler);
+AST_Nib_Pair_t parse_vartype(Nibbler nibbler);
+
+//
+
+//expressions
 AST_Nib_Pair_t parse_expression(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_orl(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_andl(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_or(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_xor(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_and(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_eq(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_cmp(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_shft(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_add(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_mult(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_pow(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_not(Nibbler nibbler);
+AST_Nib_Pair_t parse_exp_primary(Nibbler nibbler);
