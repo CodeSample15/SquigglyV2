@@ -64,6 +64,7 @@ enum TOK_TYPE {
     //booleans
     AND,                            // &&
     OR,                             // ||
+    BIT_AND,                        // &
     NOT,                            // !
     CMP_EQUALS,                     // ==
     CMP_NOT_EQUALS,                 // !=

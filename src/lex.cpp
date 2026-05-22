@@ -181,8 +181,7 @@ TOK_TYPE handle_others(file_reader::file_reader &fr, string &lexeme) {
             if(fr.has_next("&", lexeme))
                 return TOK_TYPE::AND;
             else
-                throw (ScribbleErr) { fr.loc.row, fr.loc.col, "", ERR_TYPE::UNRECOGNIZED_PATTERN };
-            return TOK_TYPE::OTHER;
+                return TOK_TYPE::BIT_AND;
         case '!': 
             if(fr.has_next("=", lexeme))
                 return TOK_TYPE::CMP_NOT_EQUALS;
