@@ -35,7 +35,7 @@ There are countless ways to develop video games and graphical applications. Howe
 - [ ] function_modifier
 - [ ] parameters
 - [ ] body
-- [ ] variable_def
+- [X] variable_def
 - [ ] vartype
 - [ ] Core function
 - [ ] start_func
@@ -87,6 +87,8 @@ variable_def        = VARTYPE , identifier , {',' , identifier} , ['=' , express
 variable_assign     = variable_reference , 
                         INCR_DECR_OP | (ASSIGN_OP , expression)
 
+variable_reference  = ['$'] , identifier , ['[' , expression , {',' expression} ']']
+
 ASSIGN_OP           = '=' 
                     | '+=' 
                     | '-=' 
@@ -104,11 +106,47 @@ branch_if           = 'if' , expression , '{' , [body] , '}'
 branch_ifelse       = 'if else' , expression , '{' , [body] , '}'
 branch_else         = 'else' , '{' , [body] , '}'
 
-# expression
-expression          = 
+# mathematical and boolean expressions
+expression          = exp_orl
+exp_orl             = exp_andl , { '||' , exp_andl }
+exp_andl            = exp_or , { '&' , exp_or }
+exp_or              = exp_xor , { '|' , exp_xor }
+exp_xor             = exp_and , { '^' , exp_and }
+exp_and             = exp_eq , { '&' , exp_and }
+exp_eq              = exp_cmp , { ('==' | '!=') , exp_cmp }
+exp_cmp             = exp_shft , { ('<' | '<=' | '>' | '>=') , exp_shft }
+exp_shft            = exp_add , { ('<<' , '>>') , exp_add }
+exp_add             = exp_mult , { ('+' | '-') , exp_mult }
+exp_mult            = exp_pow , { ('*' | '/' | '%') , exp_pow }
+exp_pow             = exp_not , [ '**' , exp_pow ]
+exp_not             = ['!'] , exp_primary
+exp_primary         = variable_reference
+                    | literal
+                    | '(' , expression , ')'
+                    | function_call
 ```
 
 NB: Grammar assumes whitespace has been stripped from the output of the lexer 
+
+## Precedence Table
+
+Derived from C, but stripped down a lot
+
+| Precedence  | Operator / Constructs                                               | Associativity |
+| ----------- | ------------------------------------------------------------------- | ------------- |
+| 1 (highest) | Primary: variable_reference, literal, ( expression ), function_call | N/A           |
+| 2           | `!`                                                                 | Right-to-left |
+| 3           | `**`                                                                | Right-to-left |
+| 4           | `*`, `/`, `%`                                                       | Left-to-right |
+| 5           | `+`, `-`                                                            | Left-to-right |
+| 6           | `<<`, `>>`                                                          | Left-to-right |
+| 7           | `>`, `>=`, `<`, `<=`                                                | Left-to-right |
+| 8           | `==`, `!=`                                                          | Left-to-right |
+| 9           | `&`                                                                 | Left-to-right |
+| 10          | `^`                                                                 | Left-to-right |
+| 11          | Bitwise OR                                                          | Left-to-right |
+| 12          | Logical AND                                                         | Left-to-right |
+| 13          | Logical OR                                                          | Left-to-right |
 
 ## Example
 
@@ -139,5 +177,3 @@ fun coroutine() {
     }
 }
 ```
-
-==

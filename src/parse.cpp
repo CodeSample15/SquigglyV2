@@ -71,7 +71,7 @@ AST_Nib_Pair_t alt(std::vector<std::function< AST_Nib_Pair_t(Nibbler) >> funcs, 
     ScribbleErr last_e = {0, 0, "", ERR_TYPE::EXPECTED};
 
     //loop through each function to try to find a pattern match
-    for(auto func : funcs) {
+    for(auto &func : funcs) {
         try {
             tie(node_res, nibbler) = func(nibbler); //if this returns without throwing an error a pattern was found
             return {node_res, nibbler};
