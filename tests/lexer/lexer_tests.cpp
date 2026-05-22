@@ -63,6 +63,8 @@ void load_lexer_tests(vector<test_t> &tests) {
     tests.emplace_back("String literal - unclosed", [&]{ test_type_lex("\"Hello World!", TOK_TYPE::STRING_LITERAL, "", true); });
     tests.emplace_back("String literal - newline unclosed", [&]{ test_type_lex("\"Hello Wor\nld!\"", TOK_TYPE::STRING_LITERAL, "", true); });
     tests.emplace_back("String literal - ' string", [&]{ test_type_lex("'Hello World'", TOK_TYPE::STRING_LITERAL, "'Hello World'"); });
+    tests.emplace_back("String literal - \" ignored in ' string", [&]{ test_type_lex("'Hello \"World\"'", TOK_TYPE::STRING_LITERAL, "'Hello \"World\"'"); });
+    tests.emplace_back("String literal - ' ignored in \" string", [&]{ test_type_lex("\"Hello 'World'\"", TOK_TYPE::STRING_LITERAL, "\"Hello 'World'\""); });
 
     tests.emplace_back(TEST_NAME_FOR_SPACE, []{});
 
