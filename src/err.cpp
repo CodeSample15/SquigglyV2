@@ -14,7 +14,9 @@ void PrintSErrMessage(ScribbleErr e, string &source) {
     cout << endl;
     cout << "  " << e.line << ": " << get_line_from_source(source, e.line) << endl;
     cout << "     " << col_spacing << "^" << endl;
-    cout << errmsg(e.type) << endl;
+    cout << "  " << errmsg(e.type) << endl;
+    if(e.msg.size()!=0) 
+        cout << "    " << e.msg << endl;
     cout << "--------------------------------------" << endl;
 }
 
@@ -28,6 +30,8 @@ string errmsg(ERR_TYPE t) {
             return "Expected closing quote";
         case ERR_TYPE::UNRECOGNIZED_PATTERN:
             return "Unrecognized pattern in source code";
+        case ERR_TYPE::EXPECTED:
+            return "Expected:";
         default:
             return "Unimplemented Error Message";
     }
