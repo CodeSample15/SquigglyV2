@@ -14,13 +14,17 @@ static AST_Node _;
 
 //parser functions
 
+AST_Nib_Pair_t parse_vartype(Nibbler nibbler) {
+    return alt_types({TOK_TYPE::STRING_TYPE, TOK_TYPE::NUMBER_TYPE, TOK_TYPE::FLOAT_TYPE}, nibbler);
+}
+
 // VARTYPE , identifier , {',' , identifier} , ['=' , expression]
 AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
     AST_Node t(NODE_TYPE::VAR_TYPE);
     vector<AST_Node> idents(1);
     AST_Node expr;
 
-    tie(t, nibbler) = alt_types({TOK_TYPE::STRING_TYPE, TOK_TYPE::NUMBER_TYPE, TOK_TYPE::FLOAT_TYPE}, nibbler);
+    tie(t, nibbler) = parse_vartype(nibbler);
     tie(idents[0], nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
 
     nibbler = many_0(nibbler, [&](Nibbler n){
@@ -48,72 +52,219 @@ AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
 
 //['$'] , identifier , ['[' , expression , {',' expression} ']']
 AST_Nib_Pair_t parse_variable_reference(Nibbler nibbler) {
-
-}
-
-//exp_andl , { '||' , exp_andl }
-AST_Nib_Pair_t parse_expression(Nibbler nibbler) {
     return {_, nibbler};
 }
 
-//exp_or , { '&' , exp_or }
-AST_Nib_Pair_t parse_exp_andl(Nibbler nibbler) {
+//EXPRESSIONS
 
+//exp_andl , { '||' , exp_andl }
+AST_Nib_Pair_t parse_expression(Nibbler nibbler) {
+    AST_Node first;
+    tie(first, nibbler) = parse_exp_andl(nibbler);
+
+    vector<AST_Node> children;
+    nibbler = many_0(nibbler, [&](Nibbler n) {
+        n = require(n, TOK_TYPE::OR).second;
+
+        AST_Node tmp;
+        tie(tmp, n) = parse_exp_andl(n);
+        children.push_back(tmp);
+
+        return n;
+    });
+
+    //compile result and return
+    if(children.size()==0) return {first, nibbler}; //just return the result
+
+    //construct a new orl node
+    AST_Node res(NODE_TYPE::EXP_ORL);
+    res.children.push_back(first);
+    for(AST_Node& n : children)
+        res.children.push_back(n);
+
+    return {res, nibbler};
+}
+
+//exp_or , { '&&' , exp_or }
+AST_Nib_Pair_t parse_exp_andl(Nibbler nibbler) {
+    AST_Node first;
+    tie(first, nibbler) = parse_exp_or(nibbler);
+
+    vector<AST_Node> children;
+    nibbler = many_0(nibbler, [&](Nibbler n) {
+        n = require(n, TOK_TYPE::AND).second;
+
+        AST_Node tmp;
+        tie(tmp, n) = parse_exp_or(n);
+        children.push_back(tmp);
+
+        return n;
+    });
+
+    //compile result and return
+    if(children.size()==0) return {first, nibbler}; //just return the result
+
+    //construct a new orl node
+    AST_Node res(NODE_TYPE::EXP_ANDL);
+    res.children.push_back(first);
+    for(AST_Node& n : children)
+        res.children.push_back(n);
+
+    return {res, nibbler};
 }
 
 //exp_xor , { '|' , exp_xor }
 AST_Nib_Pair_t parse_exp_or(Nibbler nibbler) {
+    AST_Node first;
+    tie(first, nibbler) = parse_exp_xor(nibbler);
 
+    vector<AST_Node> children;
+    nibbler = many_0(nibbler, [&](Nibbler n) {
+        AST_Node symbol;
+        tie(symbol, n) = require(n, TOK_TYPE::BAR);
+
+        AST_Node tmp;
+        tie(tmp, n) = parse_exp_xor(n);
+        children.push_back(tmp);
+
+        return n;
+    });
+
+    //compile result and return
+    if(children.size()==0) return {first, nibbler}; //just return the result
+
+    //construct a new orl node
+    AST_Node res(NODE_TYPE::EXP_OR);
+    res.children.push_back(first);
+    for(AST_Node& n : children)
+        res.children.push_back(n);
+
+    return {res, nibbler};
 }
 
 //exp_and , { '^' , exp_and }
 AST_Nib_Pair_t parse_exp_xor(Nibbler nibbler) {
+    AST_Node first;
+    tie(first, nibbler) = parse_exp_and(nibbler);
 
+    vector<AST_Node> children;
+    nibbler = many_0(nibbler, [&](Nibbler n) {
+        AST_Node symbol;
+        tie(symbol, n) = require(n, TOK_TYPE::UP_ARROW);
+
+        AST_Node tmp;
+        tmp.tok = symbol.tok;
+        tie(tmp, n) = parse_exp_and(n);
+        children.push_back(tmp);
+
+        return n;
+    });
+
+    //compile result and return
+    if(children.size()==0) return {first, nibbler}; //just return the result
+
+    //construct a new orl node
+    AST_Node res(NODE_TYPE::EXP_XOR);
+    res.children.push_back(first);
+    for(AST_Node& n : children)
+        res.children.push_back(n);
+
+    return {res, nibbler};
 }
 
-//exp_eq , { '&' , exp_and }
+//exp_eq , { '&' , exp_eq }
 AST_Nib_Pair_t parse_exp_and(Nibbler nibbler) {
+    AST_Node first;
+    tie(first, nibbler) = parse_exp_eq(nibbler);
 
+    vector<AST_Node> children;
+    nibbler = many_0(nibbler, [&](Nibbler n) {
+        AST_Node symbol;
+        tie(symbol, n) = require(n, TOK_TYPE::BIT_AND);
+
+        AST_Node tmp;
+        tmp.tok = symbol.tok;
+        tie(tmp, n) = parse_exp_eq(n);
+        children.push_back(tmp);
+
+        return n;
+    });
+
+    //compile result and return
+    if(children.size()==0) return {first, nibbler}; //just return the result
+
+    //construct a new orl node
+    AST_Node res(NODE_TYPE::EXP_AND);
+    res.children.push_back(first);
+    for(AST_Node& n : children)
+        res.children.push_back(n);
+
+    return {res, nibbler};
 }
 
 //exp_cmp , { ('==' | '!=') , exp_cmp }
 AST_Nib_Pair_t parse_exp_eq(Nibbler nibbler) {
+    AST_Node first;
+    tie(first, nibbler) = parse_exp_cmp(nibbler);
 
+    vector<AST_Node> children;
+    nibbler = many_0(nibbler, [&](Nibbler n) {
+        AST_Node symbol;
+        tie(symbol, n) = alt_types({TOK_TYPE::CMP_EQUALS, TOK_TYPE::CMP_NOT_EQUALS}, n);
+
+        AST_Node tmp;
+        tmp.tok = symbol.tok;
+        tie(tmp, n) = parse_exp_cmp(n);
+        children.push_back(tmp);
+
+        return n;
+    });
+
+    //compile result and return
+    if(children.size()==0) return {first, nibbler}; //just return the result
+
+    //construct a new orl node
+    AST_Node res(NODE_TYPE::EXP_EQ);
+    res.children.push_back(first);
+    for(AST_Node& n : children)
+        res.children.push_back(n);
+
+    return {res, nibbler};
 }
 
 //exp_shft , { ('<' | '<=' | '>' | '>=') , exp_shft }
 AST_Nib_Pair_t parse_exp_cmp(Nibbler nibbler) {
-
+    return {_, nibbler};
 }
 
 //exp_add , { ('<<' , '>>') , exp_add }
 AST_Nib_Pair_t parse_exp_shft(Nibbler nibbler) {
-
+    return {_, nibbler};
 }
 
 //exp_mult , { ('+' | '-') , exp_mult }
 AST_Nib_Pair_t parse_exp_add(Nibbler nibbler) {
-
+    return {_, nibbler};
 }
 
 //exp_pow , { ('*' | '/' | '%') , exp_pow }
 AST_Nib_Pair_t parse_exp_mult(Nibbler nibbler) {
-
+    return {_, nibbler};
 }
 
 //exp_not , [ '**' , exp_pow ]
 AST_Nib_Pair_t parse_exp_pow(Nibbler nibbler) {
-
+    return {_, nibbler};
 }
 
 //['!'] , exp_primary
 AST_Nib_Pair_t parse_exp_not(Nibbler nibbler) {
-
+    return {_, nibbler};
 }
 
 //variable_reference | literal | '(' , expression , ')' | function_call
 AST_Nib_Pair_t parse_exp_primary(Nibbler nibbler) {
-    
+    return {_, nibbler};
 }
 
 //define helper functions

@@ -109,10 +109,10 @@ branch_else         = 'else' , '{' , [body] , '}'
 # mathematical and boolean expressions
 expression          = exp_orl
 exp_orl             = exp_andl , { '||' , exp_andl }
-exp_andl            = exp_or , { '&' , exp_or }
+exp_andl            = exp_or , { '&&' , exp_or }
 exp_or              = exp_xor , { '|' , exp_xor }
 exp_xor             = exp_and , { '^' , exp_and }
-exp_and             = exp_eq , { '&' , exp_and }
+exp_and             = exp_eq , { '&' , exp_eq }
 exp_eq              = exp_cmp , { ('==' | '!=') , exp_cmp }
 exp_cmp             = exp_shft , { ('<' | '<=' | '>' | '>=') , exp_shft }
 exp_shft            = exp_add , { ('<<' , '>>') , exp_add }
