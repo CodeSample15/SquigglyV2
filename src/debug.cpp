@@ -49,6 +49,7 @@ string tok_type_to_string(TOK_TYPE tok) {
         case LESS_THAN_EQUAL: return "less than / equal to";
         case SHIFT_RIGHT: return "shift right";
         case SHIFT_LEFT: return "shift left";
+        case POW: return "power";
         case EQUALS: return "equals";
         case PLUS_EQUALS: return "plus equals";
         case MINUS_EQUALS: return "minus equals";
@@ -89,6 +90,19 @@ std::string AST_node_type_to_string(NODE_TYPE node) {
         case ARGUMENTS: return "arguments";
         case PARAMETERS: return "parameters";
         case IDENT: return "identifier";
+        case EXP_ORL: return "logical OR";
+        case EXP_ANDL: return "logical AND";
+        case EXP_OR: return "bitwise OR";
+        case EXP_XOR: return "bitwise XOR";
+        case EXP_AND: return "bitwise AND";
+        case EXP_EQ: return "equal/not equal";
+        case EXP_CMP: return "comparison";
+        case EXP_SHFT: return "shift operator";
+        case EXP_ADD: return "add/sub";
+        case EXP_MULT: return "multiplication op";
+        case EXP_POW: return "power";
+        case EXP_NOT: return "not";
+        case EXP_PRIMARY: return "primary eq";
         case NON: return "NON";
 
         default: return "WARNING: NO TYPE TO STRING";
