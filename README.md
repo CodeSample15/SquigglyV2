@@ -33,6 +33,7 @@ There are countless ways to develop video games and graphical applications. Howe
 - [ ] import_statement
 - [ ] function_def
 - [ ] function_modifier
+- [X] function_call
 - [ ] parameters
 - [ ] body
 - [X] variable_def

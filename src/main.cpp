@@ -9,7 +9,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    string input = "i[3, 3, 2]";
+    string input = "i[1,2]";
 
     try {
         cout << "Lexing..." << endl;

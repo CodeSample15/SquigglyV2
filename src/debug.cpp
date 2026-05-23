@@ -84,7 +84,6 @@ std::string AST_node_type_to_string(NODE_TYPE node) {
         case START_FUNC: return "start func";
         case UPDATE_FUNC: return "update func";
         case VAR_TYPE: return "var type";
-        case ARR_INDEX: return "array index";
         case BODY: return "body";
         case BRANCH: return "branch";
         case FUNCTION_MODIFIER: return "function modifier";

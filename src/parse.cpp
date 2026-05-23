@@ -62,7 +62,7 @@ AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
     return {res, nibbler};
 }
 
-//['$'] , identifier , [arr_index]
+//['$'] , identifier , ['[' , arguments , ']']
 AST_Nib_Pair_t parse_variable_reference(Nibbler nibbler) {
     bool built_in = false;
     try {
@@ -79,10 +79,14 @@ AST_Nib_Pair_t parse_variable_reference(Nibbler nibbler) {
 
     AST_Node arr_index;
     bool add_arr_index = false;
-    try {
-        tie(arr_index, nibbler) = parse_arr_index(nibbler);
+    opt(nibbler, [&](Nibbler n) {
+        n = require(n, TOK_TYPE::OPEN_BRACKET).second;
+        tie(arr_index, n) = parse_arguments(n);
+        n = require(n, TOK_TYPE::CLOSE_BRACKET).second;
+        
         add_arr_index = true;
-    } catch(ScribbleErr&) {}
+        return n;
+    });
 
     //create result and return
     AST_Node res(NODE_TYPE::VARIABLE_REFERENCE);
@@ -94,12 +98,31 @@ AST_Nib_Pair_t parse_variable_reference(Nibbler nibbler) {
     return {res, nibbler};
 }
 
-//'[' , expression , { ',' , expression } ']'
-AST_Nib_Pair_t parse_arr_index(Nibbler nibbler) {
-    AST_Node arr_index(NODE_TYPE::ARR_INDEX);
+//functions
+
+//identifier , '(' , [arguments] , ')'
+AST_Nib_Pair_t parse_function_call(Nibbler nibbler) {
+    AST_Node ident;
+    tie(ident, nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
+    ident.type = NODE_TYPE::FUNCTION_CALL;
+
+    AST_Node args;
+    nibbler = require(nibbler, TOK_TYPE::OPEN_PAREN).second;
+    nibbler = opt(nibbler, [&](Nibbler n) {
+        tie(args, n) = parse_arguments(n);
+        ident.children.push_back(args);
+        return n;
+    });
+    nibbler = require(nibbler, TOK_TYPE::CLOSE_PAREN).second;
+
+    return {ident, nibbler};
+}
+
+//expression , { ',' , expression }
+AST_Nib_Pair_t parse_arguments(Nibbler nibbler) {
+    AST_Node arr_index(NODE_TYPE::ARGUMENTS);
     AST_Node tmp;
 
-    nibbler = require(nibbler, TOK_TYPE::OPEN_BRACKET).second;
     tie(tmp, nibbler) = parse_expression(nibbler);
     arr_index.children.push_back(tmp);
     
@@ -111,22 +134,7 @@ AST_Nib_Pair_t parse_arr_index(Nibbler nibbler) {
         return n;
     });
 
-    nibbler = require(nibbler, TOK_TYPE::CLOSE_BRACKET).second;
-
     return {arr_index, nibbler};
-}
-
-//functions
-
-
-AST_Nib_Pair_t parse_function_call(Nibbler nibbler) {
-    throw (ScribbleErr) {0, 0, "function_call", ERR_TYPE::UNIMPLEMENTED};
-    return {_, nibbler};
-}
-
-AST_Nib_Pair_t parse_arguments(Nibbler nibbler) {
-    throw (ScribbleErr) {0, 0, "arguments", ERR_TYPE::UNIMPLEMENTED};
-    return {_, nibbler};
 }
 
 //EXPRESSIONS
