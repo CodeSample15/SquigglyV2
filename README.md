@@ -35,11 +35,12 @@ There are countless ways to develop video games and graphical applications. Howe
 - [ ] function_modifier
 - [ ] parameters
 - [ ] body
-- [ ] variable_def
+- [X] variable_def
 - [ ] vartype
-- [ ] Core function
+- [ ] core_function
 - [ ] start_func
 - [ ] update_func
+- [X] expression
 
 More abstract todo list:
 

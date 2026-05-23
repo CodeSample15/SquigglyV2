@@ -26,7 +26,8 @@ AST_Nib_Pair_t parse_vartype(Nibbler nibbler) {
 AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
     AST_Node t(NODE_TYPE::VAR_TYPE);
     vector<AST_Node> idents(1);
-    AST_Node expr;
+    AST_Node expr; 
+    bool add_expr = false;
 
     tie(t, nibbler) = parse_vartype(nibbler);
     tie(idents[0], nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
@@ -41,7 +42,8 @@ AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
 
     nibbler = opt(nibbler, [&] (Nibbler n) {
         tie(_, n) = require(n, TOK_TYPE::EQUALS);
-        //tie(expr, nibbler) = parse_expression()
+        tie(expr, nibbler) = parse_expression(n);
+        add_expr = true;
         return n;
     });
 
@@ -51,12 +53,26 @@ AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
     for(auto& ident : idents)
         res.children.push_back(ident);
 
+    if(add_expr)
+        res.children.push_back(expr);
+
     return {res, nibbler};
 }
 
 //['$'] , identifier , ['[' , expression , {',' expression} ']']
 AST_Nib_Pair_t parse_variable_reference(Nibbler nibbler) {
-    throw (ScribbleErr) {0, 0, "var_ref", ERR_TYPE::UNIMPLEMENTED};
+    bool built_in = false;
+    try {
+        nibbler = require(nibbler, TOK_TYPE::BUILT_IN_VARIABLE_REF).second;
+        built_in = true;
+    } catch (ScribbleErr&) {}
+
+    AST_Node var_name;
+    tie(var_name, nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
+
+    if(built_in)
+        var_name.tok.lexeme = '$' + var_name.tok.lexeme;
+
     return {_, nibbler};
 }
 
@@ -130,13 +146,14 @@ AST_Nib_Pair_t parse_exp_pow(Nibbler nibbler) {
 
     AST_Node tmp;
     bool use_pow = false;
-    try {
-        tie(_, nibbler) = require(nibbler, TOK_TYPE::POW);
+    nibbler = opt(nibbler, [&](Nibbler n) {
+        tie(_, n) = require(n, TOK_TYPE::POW);
         if(_.type==NODE_TYPE::NON) //this will run no matter what it's just to please the compiler (it thinks this is an infinite recursion case but it really isn't I swear)
-            tie(tmp, nibbler) = parse_exp_pow(nibbler);
+            tie(tmp, n) = parse_exp_pow(n);
 
         use_pow = true;
-    } catch(ScribbleErr&) {}
+        return n;
+    });
 
     if(use_pow) {
         AST_Node pow_node;

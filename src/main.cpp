@@ -9,7 +9,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    string input = "(3**3) / 3";
+    string input = "num i = 3";
 
     try {
         cout << "Lexing..." << endl;
@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
 
         cout << "Parsing..." << endl;
         Nibbler nibbler(&tokens);
-        AST_Node AST = parse_expression(nibbler).first;
+        AST_Node AST = parse_variable_def(nibbler).first;
         print_AST(AST);
     }
     catch (ScribbleErr e) {
