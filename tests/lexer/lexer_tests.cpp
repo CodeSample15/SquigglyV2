@@ -49,6 +49,8 @@ void load_lexer_tests(vector<test_t> &tests) {
     //testing literals
     tests.emplace_back("Identifier 1", [&]{ test_type_lex("x", TOK_TYPE::IDENTIFIER, "x"); });
     tests.emplace_back("Identifier 2", [&]{ test_type_lex("h3ll0", TOK_TYPE::IDENTIFIER, "h3ll0"); });
+    tests.emplace_back("Identifier 3", [&]{ test_type_lex("_h3ll0", TOK_TYPE::IDENTIFIER, "_h3ll0"); });
+    tests.emplace_back("Identifier 4", [&]{ test_type_lex("x_y", TOK_TYPE::IDENTIFIER, "x_y"); });
 
     tests.emplace_back(TEST_NAME_FOR_SPACE, []{});
 

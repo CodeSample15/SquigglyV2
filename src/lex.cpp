@@ -30,7 +30,7 @@ vector<Token> lex(string &source)
         size_t start_col = fr.loc.col;
 
         char c = fr.peek();
-        if(isalpha(c))
+        if(isalpha(c) || c=='_')
             type = handle_alpha(fr, lexeme);
         else if(isdigit(c))
             type = handle_digit(fr, lexeme);
@@ -67,7 +67,7 @@ void lex_strip(std::vector<Token> &input) {
 TOK_TYPE handle_alpha(file_reader::file_reader &fr, string &lexeme) {
     lexeme += fr.next();
 
-    while(!fr.empty() && (isalpha(fr.peek()) || isdigit(fr.peek()))) {
+    while(!fr.empty() && (isalpha(fr.peek()) || isdigit(fr.peek()) || fr.peek()=='_')) {
         lexeme += fr.next();
     }
 
