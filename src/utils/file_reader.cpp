@@ -49,7 +49,10 @@ bool file_reader::file_reader::has_next(string pattern, bool strict, bool consum
         if(isalpha(*tit)) return false;
     }
 
-    if(consume) it = tit;
+    if(consume) {
+        it = tit;
+        loc.col += pattern.size();
+    }
 
     return true;
 }
@@ -67,6 +70,7 @@ bool file_reader::file_reader::has_next(std::string pattern, std::string &lexeme
     }
 
     it = tit; //consume since we found the pattern
+    loc.col += pattern.size();
     lexeme += pattern;
 
     return true;
