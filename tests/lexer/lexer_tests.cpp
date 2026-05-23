@@ -104,13 +104,13 @@ void load_lexer_tests(vector<test_t> &tests) {
 
     //testing sequences
     tests.emplace_back("symbols", [&]{ 
-        test_multiple_types("(){}[];,+-/*|^><>=<=>><<=+=-=/=*=++--@$:&&||! == !=**&", {
+        test_multiple_types("(){}[];,+-/*%|^><>=<=>><<=+=-=/=*=++--@$:&&||! == !=**&", {
             TOK_TYPE::OPEN_PAREN, TOK_TYPE::CLOSE_PAREN,
             TOK_TYPE::OPEN_CURLY, TOK_TYPE::CLOSE_CURLY,
             TOK_TYPE::OPEN_BRACKET, TOK_TYPE::CLOSE_BRACKET,
             TOK_TYPE::SEMICOLON,
             TOK_TYPE::COMMA,
-            TOK_TYPE::PLUS, TOK_TYPE::MINUS, TOK_TYPE::SLASH, TOK_TYPE::STAR,
+            TOK_TYPE::PLUS, TOK_TYPE::MINUS, TOK_TYPE::SLASH, TOK_TYPE::STAR, TOK_TYPE::PERCENT,
             TOK_TYPE::BAR,
             TOK_TYPE::UP_ARROW,
             TOK_TYPE::GREATER_THAN, TOK_TYPE::LESS_THAN,

@@ -37,6 +37,7 @@ enum TOK_TYPE {
     MINUS,                          // -
     SLASH,                          // /
     STAR,                           // *
+    PERCENT,                        // %
     BAR,                            // |
     UP_ARROW,                       // ^
     GREATER_THAN,                   // >
