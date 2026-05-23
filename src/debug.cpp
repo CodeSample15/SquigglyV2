@@ -78,11 +78,13 @@ std::string AST_node_type_to_string(NODE_TYPE node) {
         case IMPORT_STATEMENT: return "import statement";
         case CORE_FUNCTION: return "core function";
         case FUNCTION_DEF: return "function def";
+        case VARIABLE_REFERENCE: return "variable reference";
         case VARIABLE_DEF: return "variable def";
         case VARIABLE_ASSIGN: return "variable assign";
         case START_FUNC: return "start func";
         case UPDATE_FUNC: return "update func";
         case VAR_TYPE: return "var type";
+        case ARR_INDEX: return "array index";
         case BODY: return "body";
         case BRANCH: return "branch";
         case FUNCTION_MODIFIER: return "function modifier";

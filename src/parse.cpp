@@ -24,7 +24,7 @@ AST_Nib_Pair_t parse_vartype(Nibbler nibbler) {
 
 // VARTYPE , identifier , {',' , identifier} , ['=' , expression]
 AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
-    AST_Node t(NODE_TYPE::VAR_TYPE);
+    AST_Node t;
     vector<AST_Node> idents(1);
     AST_Node expr; 
     bool add_expr = false;
@@ -49,9 +49,12 @@ AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
 
     //construct final node
     AST_Node res(NODE_TYPE::VARIABLE_DEF);
+    t.type = NODE_TYPE::VAR_TYPE;
     res.children.push_back(t);
-    for(auto& ident : idents)
+    for(auto& ident : idents) {
+        ident.type = NODE_TYPE::IDENT;
         res.children.push_back(ident);
+    }
 
     if(add_expr)
         res.children.push_back(expr);
@@ -59,7 +62,7 @@ AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
     return {res, nibbler};
 }
 
-//['$'] , identifier , ['[' , expression , {',' expression} ']']
+//['$'] , identifier , [arr_index]
 AST_Nib_Pair_t parse_variable_reference(Nibbler nibbler) {
     bool built_in = false;
     try {
@@ -72,11 +75,50 @@ AST_Nib_Pair_t parse_variable_reference(Nibbler nibbler) {
 
     if(built_in)
         var_name.tok.lexeme = '$' + var_name.tok.lexeme;
+    var_name.type = NODE_TYPE::IDENT;
 
-    return {_, nibbler};
+    AST_Node arr_index;
+    bool add_arr_index = false;
+    try {
+        tie(arr_index, nibbler) = parse_arr_index(nibbler);
+        add_arr_index = true;
+    } catch(ScribbleErr&) {}
+
+    //create result and return
+    AST_Node res(NODE_TYPE::VARIABLE_REFERENCE);
+    res.tok = var_name.tok;
+    res.children.push_back(var_name);
+    if(add_arr_index)
+        res.children.push_back(arr_index);
+
+    return {res, nibbler};
+}
+
+//'[' , expression , { ',' , expression } ']'
+AST_Nib_Pair_t parse_arr_index(Nibbler nibbler) {
+    AST_Node arr_index(NODE_TYPE::ARR_INDEX);
+    AST_Node tmp;
+
+    nibbler = require(nibbler, TOK_TYPE::OPEN_BRACKET).second;
+    tie(tmp, nibbler) = parse_expression(nibbler);
+    arr_index.children.push_back(tmp);
+    
+    nibbler = many_0(nibbler, [&](Nibbler n) {
+        n = require(n, TOK_TYPE::COMMA).second;
+        tie(tmp, n) = parse_expression(n);
+        arr_index.children.push_back(tmp);
+
+        return n;
+    });
+
+    nibbler = require(nibbler, TOK_TYPE::CLOSE_BRACKET).second;
+
+    return {arr_index, nibbler};
 }
 
 //functions
+
+
 AST_Nib_Pair_t parse_function_call(Nibbler nibbler) {
     throw (ScribbleErr) {0, 0, "function_call", ERR_TYPE::UNIMPLEMENTED};
     return {_, nibbler};

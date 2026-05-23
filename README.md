@@ -36,6 +36,7 @@ There are countless ways to develop video games and graphical applications. Howe
 - [ ] parameters
 - [ ] body
 - [X] variable_def
+- [X] variable_reference
 - [ ] vartype
 - [ ] core_function
 - [ ] start_func
