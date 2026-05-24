@@ -30,11 +30,14 @@ AST_Nib_Pair_t parse_program(Nibbler nibbler);
 AST_Nib_Pair_t parse_vartype(Nibbler nibbler);
 AST_Nib_Pair_t parse_variable_def(Nibbler nibbler);
 AST_Nib_Pair_t parse_variable_reference(Nibbler nibbler);
-AST_Nib_Pair_t parse_vartype(Nibbler nibbler);
+AST_Nib_Pair_t parse_variable_assign(Nibbler nibbler);
 
 //function related
+AST_Nib_Pair_t parse_function_def(Nibbler nibbler);
 AST_Nib_Pair_t parse_function_call(Nibbler nibbler);
 AST_Nib_Pair_t parse_arguments(Nibbler nibbler);
+
+AST_Nib_Pair_t parse_body(Nibbler nibbler);
 
 //expressions
 AST_Nib_Pair_t parse_expression(Nibbler nibbler);

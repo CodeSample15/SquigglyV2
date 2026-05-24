@@ -9,7 +9,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    string input = "i[1,2]";
+    string input = "i++";
 
     try {
         cout << "Lexing..." << endl;
@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
 
         cout << "Parsing..." << endl;
         Nibbler nibbler(&tokens);
-        AST_Node AST = parse_variable_reference(nibbler).first;
+        AST_Node AST = parse_variable_assign(nibbler).first;
         print_AST(AST);
     }
     catch (ScribbleErr e) {
