@@ -39,6 +39,12 @@ AST_Nib_Pair_t parse_arguments(Nibbler nibbler);
 
 AST_Nib_Pair_t parse_body(Nibbler nibbler);
 
+//branch related
+AST_Nib_Pair_t parse_branch(Nibbler nibbler);
+AST_Nib_Pair_t parse_branch_if(Nibbler nibbler);
+AST_Nib_Pair_t parse_branch_if_else(Nibbler nibbler);
+AST_Nib_Pair_t parse_branch_else(Nibbler nibbler);
+
 //expressions
 AST_Nib_Pair_t parse_expression(Nibbler nibbler);
 AST_Nib_Pair_t parse_exp_orl(Nibbler nibbler);

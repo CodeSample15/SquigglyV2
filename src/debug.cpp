@@ -11,7 +11,7 @@ void print_tokens(vector<Token> &tokens)
 }
 
 string token_to_string(Token tok) {
-    return "| " + tok_type_to_string(tok.type) + " | -- " + "line: " + to_string(tok.line) + " -- cols: (" + to_string(tok.start_col) + ", " + to_string(tok.end_col) + ") -- [" + tok.lexeme + "]";
+    return "| " + tok_type_to_string(tok.type) + " | -- " + "line: " + to_string(tok.line) + " -- cols: (" + to_string(tok.start_col) + ", " + to_string(tok.end_col) + ") -- [ " + tok.lexeme + " ]";
 }
 
 string tok_type_to_string(TOK_TYPE tok) {
@@ -21,6 +21,8 @@ string tok_type_to_string(TOK_TYPE tok) {
         case IF: return "if";
         case IF_ELSE: return "if else";
         case ELSE: return "else";
+        case TRUE: return "true";
+        case FALSE: return "false";
         case FUNCTION_DEFINE: return "function define";
         case NUMBER_TYPE: return "num type";
         case FLOAT_TYPE: return "float type";
@@ -87,6 +89,9 @@ std::string AST_node_type_to_string(NODE_TYPE node) {
         case ASSIGN: return "assign";
         case BODY: return "body";
         case BRANCH: return "branch";
+        case BRANCH_IF: return "if";
+        case BRANCH_IF_ELSE: return "if else";
+        case BRANCH_ELSE: return "else";
         case FUNCTION_MODIFIER: return "function modifier";
         case FUNCTION_CALL: return "function call";
         case ARGUMENTS: return "arguments";
