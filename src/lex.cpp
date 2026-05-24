@@ -57,7 +57,7 @@ vector<Token> lex(string &source)
 
 //strip away whitespace and comments
 void lex_strip(std::vector<Token> &input) {
-    for(int i=input.size()-1; i>=0; i--) {
+    for(int i=(int)(input.size()-1); i>=0; i--) {
         if(input[i].type==TOK_TYPE::WHITESPACE || input[i].type==TOK_TYPE::COMMENT) {
             input.erase(input.begin()+i);
         }
