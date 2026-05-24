@@ -13,6 +13,9 @@ enum TOK_TYPE {
     IF_ELSE,                        // if else
     ELSE,                           // else
 
+    TRUE,                           //true
+    FALSE,                          //false
+
     FUNCTION_DEFINE,                // fun
 
     //built in types

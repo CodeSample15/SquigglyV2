@@ -76,6 +76,8 @@ void load_lexer_tests(vector<test_t> &tests) {
     tests.emplace_back("keyword: if", [&]{ test_type_lex("if", TOK_TYPE::IF, "if"); });
     tests.emplace_back("keyword: if else", [&]{ test_type_lex("if else", TOK_TYPE::IF_ELSE, "if else"); });
     tests.emplace_back("keyword: else", [&]{ test_type_lex("else", TOK_TYPE::ELSE, "else"); });
+    tests.emplace_back("keyword: true", [&]{ test_type_lex("true", TOK_TYPE::TRUE, "true"); });
+    tests.emplace_back("keyword: false", [&]{ test_type_lex("false", TOK_TYPE::FALSE, "false"); });
     tests.emplace_back("keyword: fun", [&]{ test_type_lex("fun", TOK_TYPE::FUNCTION_DEFINE, "fun"); });
     tests.emplace_back("keyword: num", [&]{ test_type_lex("num", TOK_TYPE::NUMBER_TYPE, "num"); });
     tests.emplace_back("keyword: float", [&]{ test_type_lex("float", TOK_TYPE::FLOAT_TYPE, "float"); });

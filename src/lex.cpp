@@ -219,6 +219,10 @@ TOK_TYPE check_is_keyword(string &lexeme, file_reader::file_reader &fr) {
     }
     else if(lexeme == "else")
         return TOK_TYPE::ELSE;
+    else if(lexeme == "true")
+        return TOK_TYPE::TRUE;
+    else if(lexeme == "false")
+        return TOK_TYPE::FALSE;
     else if(lexeme == "fun")
         return TOK_TYPE::FUNCTION_DEFINE;
     else if(lexeme == "num")
