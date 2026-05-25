@@ -19,7 +19,11 @@ static AST_Node _;
 //parser functions
 
 AST_Nib_Pair_t parse_vartype(Nibbler nibbler) {
-    return alt_types({TOK_TYPE::STRING_TYPE, TOK_TYPE::NUMBER_TYPE, TOK_TYPE::FLOAT_TYPE}, nibbler);
+    AST_Node tmp;
+    tie(tmp, nibbler) = alt_types({TOK_TYPE::STRING_TYPE, TOK_TYPE::NUMBER_TYPE, TOK_TYPE::FLOAT_TYPE}, nibbler);
+    tmp.type = NODE_TYPE::VAR_TYPE;
+    
+    return {tmp, nibbler};
 }
 
 // VARTYPE , identifier , {',' , identifier} , ['=' , expression]
@@ -132,6 +136,62 @@ AST_Nib_Pair_t parse_variable_assign(Nibbler nibbler) {
 
 //FUNCTIONS
 
+//[function_modifier] , 'fun' , identifier , '(' , [parameters] , ')' , '{' , body , '}'
+AST_Nib_Pair_t parse_function_def(Nibbler nibbler) {
+    AST_Node function_def(NODE_TYPE::FUNCTION_DEF);
+    AST_Node tmp;
+
+    nibbler = opt(nibbler, [&](Nibbler n) {
+        tie(tmp, n) = parse_function_modifier(n);
+        function_def.children.push_back(tmp);
+        return n;
+    });
+
+    nibbler = require(nibbler, TOK_TYPE::FUNCTION_DEFINE).second;
+
+    //function identifier
+    tie(tmp, nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
+    function_def.tok = tmp.tok;
+
+    //get parameters
+    nibbler = require(nibbler, TOK_TYPE::OPEN_PAREN).second;
+    nibbler = opt(nibbler, [&](Nibbler n) {
+        tie(tmp, n) = parse_parameters(n);
+        function_def.children.push_back(tmp);
+        return n;
+    });
+    nibbler = require(nibbler, TOK_TYPE::CLOSE_PAREN).second;
+
+    //get function body
+    nibbler = require(nibbler, TOK_TYPE::OPEN_CURLY).second;
+    tie(tmp, nibbler) = parse_body(nibbler);
+    function_def.children.push_back(tmp);
+    nibbler = require(nibbler, TOK_TYPE::CLOSE_CURLY).second;
+
+    return {function_def, nibbler};
+}
+
+//'[' , VALID_FUNCTION_MODIFIER , {',' , VALID_FUNCTION_MODIFIER} , ']'
+AST_Nib_Pair_t parse_function_modifier(Nibbler nibbler) {
+    AST_Node modifier_node(NODE_TYPE::FUNCTION_MODIFIER);
+    AST_Node tmp;
+
+    nibbler = require(nibbler, TOK_TYPE::OPEN_BRACKET).second;
+
+    tie(tmp, nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
+    modifier_node.children.push_back(tmp);
+
+    nibbler = many_0(nibbler, [&](Nibbler n) {
+        n = require(n, TOK_TYPE::COMMA).second;
+        tie(tmp, n) = require(n, TOK_TYPE::IDENTIFIER);
+        modifier_node.children.push_back(tmp);
+
+        return n;
+    });
+
+    return {modifier_node, nibbler};
+}
+
 //identifier , '(' , [arguments] , ')'
 AST_Nib_Pair_t parse_function_call(Nibbler nibbler) {
     AST_Node ident;
@@ -148,6 +208,30 @@ AST_Nib_Pair_t parse_function_call(Nibbler nibbler) {
     nibbler = require(nibbler, TOK_TYPE::CLOSE_PAREN).second;
 
     return {ident, nibbler};
+}
+
+//VARTYPE , identifier , {',' , VARTYPE , identifier}
+AST_Nib_Pair_t parse_parameters(Nibbler nibbler) {
+    AST_Node arguments_node(NODE_TYPE::ARGUMENTS);
+    AST_Node tmp;
+
+    tie(tmp, nibbler) = parse_vartype(nibbler);
+    arguments_node.children.push_back(tmp);
+
+    tie(tmp, nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
+    arguments_node.children.push_back(tmp);
+
+    nibbler = many_0(nibbler, [&](Nibbler n) {
+        n = require(n, TOK_TYPE::COMMA).second;
+
+        tie(tmp, n) = parse_vartype(n);
+        arguments_node.children.push_back(tmp);
+
+        tie(tmp, n) = require(n, TOK_TYPE::IDENTIFIER);
+        arguments_node.children.push_back(tmp);
+
+        return n;
+    });
 }
 
 //expression , { ',' , expression }
@@ -175,7 +259,7 @@ AST_Nib_Pair_t parse_body(Nibbler nibbler) {
     AST_Node tmp;
 
     nibbler = many_0(nibbler, [&](Nibbler n) {
-        tie(tmp, n) = alt({ parse_variable_def, parse_variable_assign, parse_branch, parse_function_call }, n);
+        tie(tmp, n) = alt({ parse_variable_def, parse_variable_assign, parse_branch, parse_function_call, parse_loop }, n);
         body.children.push_back(tmp);
 
         n = opt(n, [&](Nibbler n2) {

@@ -12,7 +12,7 @@
 #define AST_Nib_Pair_t std::pair<AST_Node, Nibbler>
 typedef std::vector<Token> tok_vec_t;
 
-//helper class to consume tokens. Called nibbler cuz I'm taking small nibbles from the token vector
+//helper class to consume tokens. Called nibbler cuz I'm taking small nibbles from the token vector (Similar to how the Rust library 'Nom' works)
 class Nibbler {
 public:
     Nibbler(tok_vec_t* tokens, size_t pos=0);
@@ -34,7 +34,9 @@ AST_Nib_Pair_t parse_variable_assign(Nibbler nibbler);
 
 //function related
 AST_Nib_Pair_t parse_function_def(Nibbler nibbler);
+AST_Nib_Pair_t parse_function_modifier(Nibbler nibbler);
 AST_Nib_Pair_t parse_function_call(Nibbler nibbler);
+AST_Nib_Pair_t parse_parameters(Nibbler nibbler);
 AST_Nib_Pair_t parse_arguments(Nibbler nibbler);
 
 AST_Nib_Pair_t parse_body(Nibbler nibbler);
@@ -45,7 +47,7 @@ AST_Nib_Pair_t parse_branch_if(Nibbler nibbler);
 AST_Nib_Pair_t parse_branch_if_else(Nibbler nibbler);
 AST_Nib_Pair_t parse_branch_else(Nibbler nibbler);
 
-//loop releated
+//loop related
 AST_Nib_Pair_t parse_loop(Nibbler nibbler);
 AST_Nib_Pair_t parse_while_loop(Nibbler nibbler);
 AST_Nib_Pair_t parse_repeat_loop(Nibbler nibbler);

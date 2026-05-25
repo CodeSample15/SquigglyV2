@@ -106,10 +106,10 @@ VARTYPE             = ('num' | 'float' | 'string' | CLASS_NAME) , [ARR_TYPE]
 ARR_TYPE            = '[' , expression, {',' , expression} , ']'
 
 # branches
-branch = branch_if ,  {branch_ifelse} , [branch_else]
+branch = branch_if ,  {branch_if_else} , [branch_else]
 
 branch_if           = 'if' , expression , '{' , body , '}'
-branch_ifelse       = 'if else' , expression , '{' , body , '}'
+branch_if_else       = 'if else' , expression , '{' , body , '}'
 branch_else         = 'else' , '{' , body , '}'
 
 # loops
