@@ -42,7 +42,7 @@ AST_Nib_Pair_t parse_variable_def(Nibbler nibbler) {
 
     nibbler = opt(nibbler, [&] (Nibbler n) {
         tie(_, n) = require(n, TOK_TYPE::EQUALS);
-        tie(expr, nibbler) = parse_expression(n);
+        tie(expr, n) = parse_expression(n);
         add_expr = true;
         return n;
     });
@@ -169,10 +169,23 @@ AST_Nib_Pair_t parse_arguments(Nibbler nibbler) {
     return {arr_index, nibbler};
 }
 
-// (variable_def | variable_assign | branch | function_call | loop) , [';']
+// { (variable_def | variable_assign | branch | function_call | loop) , [';'] }
 AST_Nib_Pair_t parse_body(Nibbler nibbler) {
-    AST_Node body;
-    tie(body, nibbler) = alt({parse_variable_def}, nibbler);
+    AST_Node body(NODE_TYPE::BODY);
+    AST_Node tmp;
+
+    nibbler = many_0(nibbler, [&](Nibbler n) {
+        tie(tmp, n) = alt({ parse_variable_def, parse_variable_assign, parse_branch, parse_function_call }, n);
+        body.children.push_back(tmp);
+
+        n = opt(n, [&](Nibbler n2) {
+            n2 = require(n2, TOK_TYPE::SEMICOLON).second;
+            return n2;
+        });
+
+        return n;
+    });
+    
     return {body, nibbler};
 }
 
@@ -203,7 +216,7 @@ AST_Nib_Pair_t parse_branch(Nibbler nibbler) {
     return {branch_node, nibbler};
 }
 
-// 'if' , expression , '{' , [body] , '}'
+// 'if' , expression , '{' , body , '}'
 AST_Nib_Pair_t parse_branch_if(Nibbler nibbler) {
     AST_Node if_node(NODE_TYPE::BRANCH_IF);
     AST_Node tmp;
@@ -214,21 +227,14 @@ AST_Nib_Pair_t parse_branch_if(Nibbler nibbler) {
     if_node.children.push_back(tmp);
 
     nibbler = require(nibbler, TOK_TYPE::OPEN_CURLY).second;
-    nibbler = opt(nibbler, [&](Nibbler n) {
-        AST_Node tmp_body;
-        tie(tmp_body, n) = parse_body(n);
-
-        //add the body to the children of the node to be returned
-        if_node.children.push_back(tmp_body);
-
-        return n;
-    });
+    tie(tmp, nibbler) = parse_body(nibbler);
+    if_node.children.push_back(tmp);
     nibbler = require(nibbler, TOK_TYPE::CLOSE_CURLY).second;
 
     return {if_node, nibbler};
 }
 
-// 'if else' , expression , '{' , [body] , '}'
+// 'if else' , expression , '{' , body , '}'
 AST_Nib_Pair_t parse_branch_if_else(Nibbler nibbler) {
     AST_Node if_else_node(NODE_TYPE::BRANCH_IF_ELSE);
     AST_Node tmp;
@@ -239,38 +245,24 @@ AST_Nib_Pair_t parse_branch_if_else(Nibbler nibbler) {
     if_else_node.children.push_back(tmp);
 
     nibbler = require(nibbler, TOK_TYPE::OPEN_CURLY).second;
-    nibbler = opt(nibbler, [&](Nibbler n) {
-        AST_Node tmp_body;
-        tie(tmp_body, n) = parse_body(n);
-
-        //add the body to the children of the node to be returned
-        if_else_node.children.push_back(tmp_body);
-
-        return n;
-    });
+    tie(tmp, nibbler) = parse_body(nibbler);
+    if_else_node.children.push_back(tmp);
     nibbler = require(nibbler, TOK_TYPE::CLOSE_CURLY).second;
 
     return {if_else_node, nibbler};
 }
 
-// 'else' , '{' , [body] , '}'
+// 'else' , '{' , body , '}'
 AST_Nib_Pair_t parse_branch_else(Nibbler nibbler) {
     AST_Node else_node(NODE_TYPE::BRANCH_ELSE);
     AST_Node tmp;
 
     tie(tmp, nibbler) = require(nibbler, TOK_TYPE::ELSE); // for the sake of getting a token
-    nibbler = require(nibbler, TOK_TYPE::OPEN_CURLY).second;
-    nibbler = opt(nibbler, [&](Nibbler n) {
-        AST_Node tmp_body;
-        tie(tmp_body, n) = parse_body(n);
-
-        //add the body to the children of the node to be returned
-        else_node.children.push_back(tmp_body);
-
-        return n;
-    });
-
     else_node.tok = tmp.tok;
+    nibbler = require(nibbler, TOK_TYPE::OPEN_CURLY).second;
+    tie(tmp, nibbler) = parse_body(nibbler);
+    else_node.children.push_back(tmp);
+    nibbler = require(nibbler, TOK_TYPE::CLOSE_CURLY).second;
     return {else_node, nibbler};
 }
 

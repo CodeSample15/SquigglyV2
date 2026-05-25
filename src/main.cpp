@@ -9,7 +9,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    string input = "if(true) {} if else (false) {} else {}";
+    string input = "if(!true) {num i=0} if else (false) {} else {}";
 
     try {
         cout << "Lexing..." << endl;
