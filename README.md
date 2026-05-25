@@ -31,10 +31,10 @@ There are countless ways to develop video games and graphical applications. Howe
 
 - [ ] Program
 - [ ] import_statement
-- [ ] function_def
-- [ ] function_modifier
+- [X] function_def
+- [X] function_modifier
 - [X] function_call
-- [ ] parameters
+- [X] parameters
 - [X] body
 - [X] branch
 - [X] variable_def
