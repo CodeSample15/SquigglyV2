@@ -259,11 +259,56 @@ AST_Nib_Pair_t parse_branch_else(Nibbler nibbler) {
 
     tie(tmp, nibbler) = require(nibbler, TOK_TYPE::ELSE); // for the sake of getting a token
     else_node.tok = tmp.tok;
+
     nibbler = require(nibbler, TOK_TYPE::OPEN_CURLY).second;
     tie(tmp, nibbler) = parse_body(nibbler);
     else_node.children.push_back(tmp);
     nibbler = require(nibbler, TOK_TYPE::CLOSE_CURLY).second;
+
     return {else_node, nibbler};
+}
+
+//LOOPS
+
+// while_loop | repeat_loop
+AST_Nib_Pair_t parse_loop(Nibbler nibbler) {
+    return alt({parse_while_loop, parse_repeat_loop}, nibbler);
+}
+
+// 'while' , expression , '{' , body , '}'
+AST_Nib_Pair_t parse_while_loop(Nibbler nibbler) {
+    AST_Node loop_node(NODE_TYPE::LOOP_WHILE);
+    AST_Node tmp;
+
+    nibbler = require(nibbler, TOK_TYPE::WHILE).second;
+
+    tie(tmp, nibbler) = parse_expression(nibbler);
+    loop_node.children.push_back(tmp);
+
+    nibbler = require(nibbler, TOK_TYPE::OPEN_CURLY).second;
+    tie(tmp, nibbler) = parse_body(nibbler);
+    loop_node.children.push_back(tmp);   
+    nibbler = require(nibbler, TOK_TYPE::CLOSE_CURLY).second;
+
+    return {loop_node, nibbler};
+}
+
+// 'repeat' , expression , '{' , body , '}'
+AST_Nib_Pair_t parse_repeat_loop(Nibbler nibbler) {
+    AST_Node loop_node(NODE_TYPE::LOOP_REPEAT);
+    AST_Node tmp;
+
+    nibbler = require(nibbler, TOK_TYPE::REPEAT).second;
+
+    tie(tmp, nibbler) = parse_expression(nibbler);
+    loop_node.children.push_back(tmp);
+
+    nibbler = require(nibbler, TOK_TYPE::OPEN_CURLY).second;
+    tie(tmp, nibbler) = parse_body(nibbler);
+    loop_node.children.push_back(tmp);   
+    nibbler = require(nibbler, TOK_TYPE::CLOSE_CURLY).second;
+
+    return {loop_node, nibbler};
 }
 
 //EXPRESSIONS

@@ -94,6 +94,8 @@ std::string AST_node_type_to_string(NODE_TYPE node) {
         case BRANCH_IF: return "if";
         case BRANCH_IF_ELSE: return "if else";
         case BRANCH_ELSE: return "else";
+        case LOOP_WHILE: return "loop while";
+        case LOOP_REPEAT: return "loop repeat";
         case FUNCTION_MODIFIER: return "function modifier";
         case FUNCTION_CALL: return "function call";
         case ARGUMENTS: return "arguments";

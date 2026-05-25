@@ -35,12 +35,12 @@ There are countless ways to develop video games and graphical applications. Howe
 - [ ] function_modifier
 - [X] function_call
 - [ ] parameters
-- [ ] body
+- [X] body
 - [X] branch
 - [X] variable_def
 - [X] variable_reference
 - [X] variable_assign
-- [ ] vartype
+- [X] vartype
 - [ ] core_function
 - [ ] start_func
 - [ ] update_func
@@ -49,8 +49,9 @@ There are countless ways to develop video games and graphical applications. Howe
 More abstract todo list:
 
 - [X] General parser architecture
-- [ ] Node type enum
-- [ ] Fully functional AST setup
+- [X] Node type enum
+- [X] Fully functional AST setup
+- [ ] Fix error reporting to be more useful (say what segment was expected, not just what token)
 - [ ] Parser tests
 - [ ] AST tests
 

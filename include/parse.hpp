@@ -45,6 +45,11 @@ AST_Nib_Pair_t parse_branch_if(Nibbler nibbler);
 AST_Nib_Pair_t parse_branch_if_else(Nibbler nibbler);
 AST_Nib_Pair_t parse_branch_else(Nibbler nibbler);
 
+//loop releated
+AST_Nib_Pair_t parse_loop(Nibbler nibbler);
+AST_Nib_Pair_t parse_while_loop(Nibbler nibbler);
+AST_Nib_Pair_t parse_repeat_loop(Nibbler nibbler);
+
 //expressions
 AST_Nib_Pair_t parse_expression(Nibbler nibbler);
 AST_Nib_Pair_t parse_exp_orl(Nibbler nibbler);
