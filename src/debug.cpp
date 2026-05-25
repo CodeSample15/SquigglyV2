@@ -21,6 +21,8 @@ string tok_type_to_string(TOK_TYPE tok) {
         case IF: return "if";
         case IF_ELSE: return "if else";
         case ELSE: return "else";
+        case WHILE: return "while";
+        case REPEAT: return "repeat";
         case TRUE: return "true";
         case FALSE: return "false";
         case FUNCTION_DEFINE: return "function define";

@@ -13,6 +13,9 @@ enum TOK_TYPE {
     IF_ELSE,                        // if else
     ELSE,                           // else
 
+    WHILE,                          // while
+    REPEAT,                         // repeat
+
     TRUE,                           //true
     FALSE,                          //false
 
