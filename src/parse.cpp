@@ -1,4 +1,3 @@
-#include <iostream>
 #include "parse.hpp"
 #include "debug.hpp"
 
@@ -16,9 +15,25 @@ AST_Nib_Pair_t expression_seg_parse(Nibbler nibbler, std::function< AST_Nib_Pair
 //useful variables
 static AST_Node _;
 
-//preprocessor
+//{import_statement} , {core_function | function_def | variable_def}
+AST_Nib_Pair_t parse_program(Nibbler nibbler) {
+    AST_Node program(NODE_TYPE::PROGRAM);
+    AST_Node tmp;
 
-//main parse functions
+    nibbler = many_0(nibbler, [&](Nibbler n) {
+        tie(tmp, n) = alt({parse_core_function, parse_function_def, parse_variable_def, parse_variable_assign}, n);
+        program.children.push_back(tmp);
+        return n;
+    });
+
+    return {program, nibbler};
+}
+
+//PREPROCESSOR
+
+//TODO
+
+//MAIN STUFF
 
 //start_func | update_func
 AST_Nib_Pair_t parse_core_function(Nibbler nibbler) {
