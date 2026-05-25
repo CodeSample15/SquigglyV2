@@ -63,14 +63,14 @@ More abstract todo list:
 program = {import_statement} , {core_function | function_def | variable_def | }
 
 core_function       = start_func | update_func
-start_func          = ':START:{' , {body} , '}'
-update_func         = ':UPDATE:{' , {body} , '}'
+start_func          = ':START:{' , body , '}'
+update_func         = ':UPDATE:{' , body , '}'
 
 
 # Function declarations:
 VALID_FUNCTION_MODIFIER = 'thread' | 'quiet' |  # room to grow with more function modifiers
 
-function_def        = [function_modifier] , 'fun' , identifier , '(' , [parameters] , ')' , '{' , {body} , '}'
+function_def        = [function_modifier] , 'fun' , identifier , '(' , [parameters] , ')' , '{' , body , '}'
 
 function_modifier   = '[' , VALID_FUNCTION_MODIFIER , {',' , VALID_FUNCTION_MODIFIER} , ']'
 
@@ -81,11 +81,11 @@ parameters          = VARTYPE , identifier , {',' , VARTYPE , identifier}
 arguments           = expression , {',' , expression}
 
 # Function bodies:
-body                = (variable_def 
+body                = {(variable_def 
                     | variable_assign 
                     | branch 
                     | function_call
-                    | loop) , [';']
+                    | loop) , [';']}
 
 # variables
 variable_def        = VARTYPE , identifier , {',' , identifier} , ['=' , expression]
@@ -107,9 +107,15 @@ ARR_TYPE            = '[' , expression, {',' , expression} , ']'
 # branches
 branch = branch_if ,  {branch_ifelse} , [branch_else]
 
-branch_if           = 'if' , expression , '{' , [body] , '}'
-branch_ifelse       = 'if else' , expression , '{' , [body] , '}'
-branch_else         = 'else' , '{' , [body] , '}'
+branch_if           = 'if' , expression , '{' , body , '}'
+branch_ifelse       = 'if else' , expression , '{' , body , '}'
+branch_else         = 'else' , '{' , body , '}'
+
+# loops
+loop                = while_loop | repeat_loop
+
+while_loop          = 'while' , expression , '{' , body , '}'
+repeat_loop         = 'repeat' , expression , '{' , body , '}'
 
 # mathematical and boolean expressions
 expression          = exp_orl
