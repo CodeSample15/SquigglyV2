@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #include "lex.hpp"
@@ -8,8 +9,14 @@
 
 using namespace std;
 
+bool parse_args(int argc, char** argv, string &res);
+
 int main(int argc, char** argv) {
-    string input = "while (5) {}";
+    string input = "";
+    if(!parse_args(argc, argv, input)) {
+        cout << "Error reading file" << endl;
+        return 0;
+    }
 
     try {
         cout << "Lexing..." << endl;
@@ -22,7 +29,7 @@ int main(int argc, char** argv) {
 
         cout << "Parsing..." << endl;
         Nibbler nibbler(&tokens);
-        AST_Node AST = parse_loop(nibbler).first;
+        AST_Node AST = parse_program(nibbler).first;
         print_AST(AST);
     }
     catch (ScribbleErr e) {
@@ -30,4 +37,20 @@ int main(int argc, char** argv) {
     }
 
     return 0;
+}
+
+bool parse_args(int argc, char** argv, string &res) {
+    if(argc < 2) return false;
+
+    ifstream f;
+    f.open(argv[1]);
+    if(!f.is_open()) return false;
+
+    string tmp = "";
+    while(getline(f, tmp)) {
+        res += tmp + "\n";
+    }
+
+    f.close();
+    return true;
 }

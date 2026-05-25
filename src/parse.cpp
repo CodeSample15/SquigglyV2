@@ -276,26 +276,28 @@ AST_Nib_Pair_t parse_function_call(Nibbler nibbler) {
 
 //VARTYPE , identifier , {',' , VARTYPE , identifier}
 AST_Nib_Pair_t parse_parameters(Nibbler nibbler) {
-    AST_Node arguments_node(NODE_TYPE::ARGUMENTS);
+    AST_Node param_node(NODE_TYPE::ARGUMENTS);
     AST_Node tmp;
 
     tie(tmp, nibbler) = parse_vartype(nibbler);
-    arguments_node.children.push_back(tmp);
+    param_node.children.push_back(tmp);
 
     tie(tmp, nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
-    arguments_node.children.push_back(tmp);
+    param_node.children.push_back(tmp);
 
     nibbler = many_0(nibbler, [&](Nibbler n) {
         n = require(n, TOK_TYPE::COMMA).second;
 
         tie(tmp, n) = parse_vartype(n);
-        arguments_node.children.push_back(tmp);
+        param_node.children.push_back(tmp);
 
         tie(tmp, n) = require(n, TOK_TYPE::IDENTIFIER);
-        arguments_node.children.push_back(tmp);
+        param_node.children.push_back(tmp);
 
         return n;
     });
+
+    return {param_node, nibbler};
 }
 
 //expression , { ',' , expression }
