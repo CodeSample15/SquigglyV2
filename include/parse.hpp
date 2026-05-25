@@ -23,8 +23,15 @@ private:
     static tok_vec_t* tokens;
 };
 
-//main parse functions
 AST_Nib_Pair_t parse_program(Nibbler nibbler);
+
+//preprocessor
+AST_Nib_Pair_t parse_import_statement(Nibbler nibbler); //TODO
+
+//main parse functions
+AST_Nib_Pair_t parse_core_function(Nibbler nibbler);
+AST_Nib_Pair_t parse_start_func(Nibbler nibbler);
+AST_Nib_Pair_t parse_update_func(Nibbler nibbler);
 
 //variable related
 AST_Nib_Pair_t parse_vartype(Nibbler nibbler);

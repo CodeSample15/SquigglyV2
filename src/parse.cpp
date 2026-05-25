@@ -16,6 +16,55 @@ AST_Nib_Pair_t expression_seg_parse(Nibbler nibbler, std::function< AST_Nib_Pair
 //useful variables
 static AST_Node _;
 
+//preprocessor
+
+//main parse functions
+
+//start_func | update_func
+AST_Nib_Pair_t parse_core_function(Nibbler nibbler) {
+    return alt({parse_start_func, parse_update_func}, nibbler);
+}
+
+//':START:{' , body , '}'
+AST_Nib_Pair_t parse_start_func(Nibbler nibbler) {
+    AST_Node start_node(NODE_TYPE::START_FUNC);
+    AST_Node tmp;
+
+    //header
+    nibbler = require(nibbler, TOK_TYPE::SPECIAL_FUNCTION_PREFIX).second;
+    tie(tmp, nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
+    if(tmp.tok.lexeme != "START") throw (ScribbleErr) { tmp.tok.line, tmp.tok.start_col, "START", ERR_TYPE::EXPECTED };
+    nibbler = require(nibbler, TOK_TYPE::SPECIAL_FUNCTION_PREFIX).second;
+    
+    //body
+    nibbler = require(nibbler, TOK_TYPE::OPEN_CURLY).second;
+    tie(tmp, nibbler) = parse_body(nibbler);
+    start_node.children.push_back(tmp);
+    nibbler = require(nibbler, TOK_TYPE::CLOSE_CURLY).second;
+
+    return {start_node, nibbler};
+}
+
+//':UPDATE:{' , body , '}'
+AST_Nib_Pair_t parse_update_func(Nibbler nibbler) {
+    AST_Node update_node(NODE_TYPE::UPDATE_FUNC);
+    AST_Node tmp;
+
+    //header
+    nibbler = require(nibbler, TOK_TYPE::SPECIAL_FUNCTION_PREFIX).second;
+    tie(tmp, nibbler) = require(nibbler, TOK_TYPE::IDENTIFIER);
+    if(tmp.tok.lexeme != "UPDATE") throw (ScribbleErr) { tmp.tok.line, tmp.tok.start_col, "UPDATE", ERR_TYPE::EXPECTED };
+    nibbler = require(nibbler, TOK_TYPE::SPECIAL_FUNCTION_PREFIX).second;
+    
+    //body
+    nibbler = require(nibbler, TOK_TYPE::OPEN_CURLY).second;
+    tie(tmp, nibbler) = parse_body(nibbler);
+    update_node.children.push_back(tmp);
+    nibbler = require(nibbler, TOK_TYPE::CLOSE_CURLY).second;
+
+    return {update_node, nibbler};
+}
+
 //parser functions
 
 AST_Nib_Pair_t parse_vartype(Nibbler nibbler) {
